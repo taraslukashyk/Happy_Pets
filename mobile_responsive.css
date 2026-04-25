@@ -187,9 +187,34 @@
   div[style*="grid-template-columns: repeat(3, 1fr)"],
   div[style*="grid-template-columns:repeat(2,1fr)"],
   div[style*="grid-template-columns: repeat(2, 1fr)"],
-  div[style*="grid-template-columns:1fr 1.4fr"],
-  div[style*="grid-template-columns:1.6fr 1fr 1fr 1fr"] {
+  div[style*="grid-template-columns:1fr 1.4fr"] {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Footer specific compact mobile layout */
+  #footer {
+    padding-top: 32px !important;
+  }
+  
+  #footer > div > div:first-child {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px 16px !important;
+    padding-bottom: 24px !important;
+  }
+  
+  #footer > div > div:first-child > div:nth-child(1) {
+    grid-column: 1 / -1 !important; /* Brand info full width */
+    margin-bottom: 8px !important;
+  }
+  #footer > div > div:first-child > div:nth-child(4) {
+    grid-column: 1 / -1 !important; /* Contact info full width */
+    margin-top: 8px !important;
+  }
+  
+  /* Reduce brand text margin in footer to save space */
+  #footer > div > div:first-child > div:nth-child(1) p {
+    margin-bottom: 16px !important;
   }
 
   /* Services tabs */
