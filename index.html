@@ -1,0 +1,2967 @@
+<!doctype html>
+<html lang="uk">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Happy Pets — Грумінг & SPA, Черкаси · вул. Симоненка, 5</title>
+  <meta name="description"
+    content="Грумінг-салон у центрі Черкас. Стрижка, купання, SPA, озонотерапія для собак і котів усіх порід. Онлайн-запис 24/7.">
+  <link rel="stylesheet" href="colors_and_type.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+    integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+    integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+    integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+    crossorigin="anonymous"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--hp-paper);
+      font-family: var(--hp-font-text);
+      color: var(--hp-ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    @keyframes kenBurns {
+      from {
+        transform: scale(1)
+      }
+
+      to {
+        transform: scale(1.06)
+      }
+    }
+
+    @keyframes floatCard {
+
+      0%,
+      100% {
+        transform: rotate(-3deg) translateY(0)
+      }
+
+      50% {
+        transform: rotate(-3deg) translateY(-6px)
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .5
+      }
+    }
+
+    .anim-fade-up {
+      animation: fadeUp 0.6s var(--hp-ease) both;
+    }
+
+    .anim-delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .anim-delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .anim-delay-3 {
+      animation-delay: 0.35s;
+    }
+
+    .anim-delay-4 {
+      animation-delay: 0.5s;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253, 250, 251, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--hp-rule-soft);
+      transition: box-shadow 0.2s var(--hp-ease);
+    }
+
+    .nav.scrolled {
+      box-shadow: var(--hp-shadow-sm);
+    }
+
+    .nav-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--hp-rose-soft);
+    }
+
+    .nav-logo-name {
+      font-family: var(--hp-font-display);
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--hp-ink);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--hp-ink-2);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--hp-rose);
+      transition: width 0.2s var(--hp-ease);
+    }
+
+    .nav-links a:hover {
+      color: var(--hp-rose-deep);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: var(--hp-r-pill);
+      font-family: var(--hp-font-text);
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s var(--hp-ease);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--hp-rose);
+      color: #fff;
+      box-shadow: var(--hp-shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--hp-rose-deep);
+      box-shadow: var(--hp-shadow-md);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--hp-rose-deep);
+      border: 1.5px solid var(--hp-rose) !important;
+    }
+
+    .btn-secondary:hover {
+      background: var(--hp-rose-soft);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--hp-ink);
+      border: 1px solid var(--hp-rule-soft) !important;
+    }
+
+    .btn-ghost:hover {
+      background: var(--hp-paper-2);
+    }
+
+    .btn-ink {
+      background: var(--hp-ink);
+      color: #fff;
+    }
+
+    .btn-ink:hover {
+      background: var(--hp-rose-deep);
+    }
+
+    .btn-sm {
+      padding: 9px 18px;
+      font-size: 13px;
+    }
+
+    .btn-md {
+      padding: 13px 24px;
+      font-size: 15px;
+    }
+
+    .btn-lg {
+      padding: 17px 32px;
+      font-size: 16px;
+    }
+
+    .btn-xl {
+      padding: 20px 40px;
+      font-size: 17px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: var(--hp-rose-soft);
+      padding: 88px 0 80px;
+      min-height: 640px;
+    }
+
+    .hero-paw-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.09;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px;
+      background: #fff;
+      border-radius: var(--hp-r-pill);
+      box-shadow: var(--hp-shadow-sm);
+      margin-bottom: 24px;
+    }
+
+    .hero-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--hp-rose);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-pill-text {
+      font-family: var(--hp-font-text);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--hp-rose-deep);
+    }
+
+    .hero-h1 {
+      font-family: var(--hp-font-display);
+      font-weight: 700;
+      font-size: clamp(52px, 5.5vw, 76px);
+      color: var(--hp-rose-deep);
+      letter-spacing: -0.03em;
+      line-height: 0.96;
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      font-weight: 500;
+      color: var(--hp-ink);
+    }
+
+    .hero-sub {
+      margin-top: 20px;
+      font-size: 17px;
+      color: var(--hp-ink-2);
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--hp-rose-deep);
+    }
+
+    .hero-meta-item svg {
+      opacity: 0.7;
+    }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+      min-height: 480px;
+    }
+
+    .hero-photo-wrap {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--hp-r-2xl);
+      overflow: hidden;
+      box-shadow: var(--hp-shadow-xl);
+    }
+
+    .hero-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1A1A2E 0%, #3D1A2E 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .hero-photo-label {
+      font-family: var(--hp-font-mono);
+      font-size: 12px;
+      color: rgba(255, 214, 232, 0.7);
+      letter-spacing: 0.06em;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 7px 14px;
+      border-radius: 6px;
+    }
+
+    /* Floating review card */
+    .hero-review-card {
+      position: absolute;
+      bottom: -20px;
+      left: -28px;
+      z-index: 2;
+      background: #fff;
+      border-radius: var(--hp-r-lg);
+      padding: 16px 20px;
+      box-shadow: var(--hp-shadow-lg);
+      max-width: 230px;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+
+    .hero-review-stars {
+      font-size: 16px;
+      color: var(--hp-warn);
+      letter-spacing: 1px;
+    }
+
+    .hero-review-text {
+      font-size: 13px;
+      color: var(--hp-ink);
+      margin-top: 6px;
+      line-height: 1.45;
+      font-style: italic;
+    }
+
+    .hero-review-author {
+      font-size: 11px;
+      color: var(--hp-ink-3);
+      margin-top: 7px;
+      font-weight: 600;
+    }
+
+    /* Floating stat badge */
+    .hero-stat-badge {
+      position: absolute;
+      top: 24px;
+      right: -16px;
+      z-index: 2;
+      background: var(--hp-rose);
+      color: #fff;
+      border-radius: var(--hp-r-lg);
+      padding: 14px 18px;
+      box-shadow: var(--hp-shadow-md);
+      text-align: center;
+    }
+
+    .hero-stat-num {
+      font-family: var(--hp-font-display);
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.88;
+      margin-top: 3px;
+    }
+
+    /* ── Section common ── */
+    .section {
+      padding: 88px 0;
+    }
+
+    .section-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .section-eyebrow {
+      font-family: var(--hp-font-text);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--hp-rose);
+    }
+
+    .section-title {
+      font-family: var(--hp-font-display);
+      font-weight: 700;
+      font-size: clamp(32px, 3.5vw, 46px);
+      letter-spacing: -0.02em;
+      line-height: 1.08;
+      margin-top: 10px;
+      color: var(--hp-ink);
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--hp-ink-2);
+      line-height: 1.6;
+      max-width: 560px;
+      margin-top: 12px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 40px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Scroll indicator ── */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--hp-rose-deep);
+      opacity: 0.7;
+      cursor: pointer;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 32px;
+      background: var(--hp-rose);
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════════════════════════════════════════════
+     NAV
+═════════════════════════════════════════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <img src="assets/logo-official.jpg" alt="Happy Pets лого">
+        <span class="nav-logo-name">Happy Pets</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#services">Послуги</a></li>
+        <li><a href="#team">Команда</a></li>
+        <li><a href="#pricing">Ціни</a></li>
+        <li><a href="#gallery">Роботи</a></li>
+        <li><a href="#reviews">Відгуки</a></li>
+        <li><a href="#contacts">Контакти</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="https://t.me/happy_pets_che" target="_blank" class="btn btn-ghost btn-sm">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          Telegram
+        </a>
+        <button class="btn btn-primary btn-sm" onclick="openBooking()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+            <ellipse cx="12" cy="15" rx="6" ry="5" />
+            <circle cx="5.5" cy="9" r="2.2" />
+            <circle cx="10" cy="5.5" r="2" />
+            <circle cx="14" cy="5.5" r="2" />
+            <circle cx="18.5" cy="9" r="2.2" />
+          </svg>
+          Записатися
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+     HERO
+═════════════════════════════════════════════ -->
+  <section class="hero" data-screen-label="Hero">
+    <!-- Paw pattern background -->
+    <svg class="hero-paw-bg" width="100%" height="100%" aria-hidden="true">
+      <defs>
+        <symbol id="pd" viewBox="-20 -20 40 40">
+          <ellipse cx="0" cy="8" rx="13" ry="11" />
+          <circle cx="-11" cy="-5" r="4.2" />
+          <circle cx="-4" cy="-13" r="3.7" />
+          <circle cx="4" cy="-13" r="3.7" />
+          <circle cx="11" cy="-5" r="4.2" />
+        </symbol>
+        <symbol id="po" viewBox="-20 -20 40 40">
+          <ellipse cx="0" cy="8" rx="13" ry="11" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="-11" cy="-5" r="4.2" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="-4" cy="-13" r="3.7" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="4" cy="-13" r="3.7" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="11" cy="-5" r="4.2" fill="none" stroke="currentColor" stroke-width="2" />
+        </symbol>
+      </defs>
+
+      <!-- Row 1 -->
+      <use href="#pd" x="20" y="15" width="28" height="28" fill="#C44070" transform="rotate(-20,34,29)" />
+      <use href="#po" x="100" y="8" width="22" height="22" color="#C44070" transform="rotate(15,111,19)" />
+      <use href="#pd" x="190" y="20" width="36" height="36" fill="#D4457A" transform="rotate(35,208,38)" />
+      <use href="#po" x="300" y="5" width="18" height="18" color="#B83568" transform="rotate(-10,309,14)" />
+      <use href="#pd" x="390" y="18" width="30" height="30" fill="#C44070" transform="rotate(22,405,33)" />
+      <use href="#po" x="490" y="8" width="40" height="40" color="#D4457A" transform="rotate(-30,510,28)" />
+      <use href="#pd" x="600" y="15" width="24" height="24" fill="#B83568" transform="rotate(12,612,27)" />
+      <use href="#po" x="690" y="5" width="34" height="34" color="#C44070" transform="rotate(-18,707,22)" />
+      <use href="#pd" x="800" y="20" width="20" height="20" fill="#D4457A" transform="rotate(28,810,30)" />
+      <use href="#po" x="890" y="8" width="38" height="38" color="#B83568" transform="rotate(-25,909,27)" />
+      <use href="#pd" x="1000" y="14" width="26" height="26" fill="#C44070" transform="rotate(18,1013,27)" />
+      <use href="#po" x="1100" y="5" width="32" height="32" color="#D4457A" transform="rotate(-12,1116,21)" />
+      <use href="#pd" x="1210" y="18" width="22" height="22" fill="#B83568" transform="rotate(30,1221,29)" />
+      <use href="#po" x="1310" y="8" width="36" height="36" color="#C44070" transform="rotate(-20,1328,26)" />
+
+      <!-- Row 2 -->
+      <use href="#po" x="60" y="95" width="36" height="36" color="#D4457A" transform="rotate(25,78,113)" />
+      <use href="#pd" x="165" y="85" width="22" height="22" fill="#C44070" transform="rotate(-15,176,96)" />
+      <use href="#po" x="255" y="100" width="30" height="30" color="#B83568" transform="rotate(38,270,115)" />
+      <use href="#pd" x="360" y="82" width="40" height="40" fill="#D4457A" transform="rotate(-28,380,102)" />
+      <use href="#po" x="470" y="98" width="18" height="18" color="#C44070" transform="rotate(10,479,107)" />
+      <use href="#pd" x="555" y="85" width="34" height="34" fill="#B83568" transform="rotate(-22,572,102)" />
+      <use href="#po" x="660" y="100" width="26" height="26" color="#D4457A" transform="rotate(32,673,113)" />
+      <use href="#pd" x="760" y="83" width="38" height="38" fill="#C44070" transform="rotate(-10,779,102)" />
+      <use href="#po" x="870" y="97" width="20" height="20" color="#B83568" transform="rotate(20,880,107)" />
+      <use href="#pd" x="960" y="85" width="32" height="32" fill="#D4457A" transform="rotate(-30,976,101)" />
+      <use href="#po" x="1065" y="100" width="28" height="28" color="#C44070" transform="rotate(15,1079,114)" />
+      <use href="#pd" x="1165" y="83" width="24" height="24" fill="#B83568" transform="rotate(-18,1177,95)" />
+      <use href="#po" x="1260" y="97" width="36" height="36" color="#D4457A" transform="rotate(28,1278,115)" />
+      <use href="#pd" x="1365" y="85" width="22" height="22" fill="#C44070" transform="rotate(-12,1376,96)" />
+
+      <!-- Row 3 -->
+      <use href="#pd" x="15" y="178" width="32" height="32" fill="#C44070" transform="rotate(20,31,194)" />
+      <use href="#po" x="110" y="170" width="24" height="24" color="#D4457A" transform="rotate(-25,122,182)" />
+      <use href="#pd" x="205" y="182" width="38" height="38" fill="#B83568" transform="rotate(15,224,201)" />
+      <use href="#po" x="315" y="168" width="20" height="20" color="#C44070" transform="rotate(-35,325,178)" />
+      <use href="#pd" x="400" y="180" width="28" height="28" fill="#D4457A" transform="rotate(30,414,194)" />
+      <use href="#po" x="500" y="170" width="40" height="40" color="#B83568" transform="rotate(-12,520,190)" />
+      <use href="#pd" x="610" y="182" width="18" height="18" fill="#C44070" transform="rotate(22,619,191)" />
+      <use href="#po" x="700" y="168" width="36" height="36" color="#D4457A" transform="rotate(-20,718,186)" />
+      <use href="#pd" x="810" y="180" width="30" height="30" fill="#B83568" transform="rotate(10,825,195)" />
+      <use href="#po" x="905" y="170" width="22" height="22" color="#C44070" transform="rotate(-28,916,181)" />
+      <use href="#pd" x="995" y="182" width="34" height="34" fill="#D4457A" transform="rotate(18,1012,199)" />
+      <use href="#po" x="1100" y="168" width="26" height="26" color="#B83568" transform="rotate(-15,1113,181)" />
+      <use href="#pd" x="1195" y="180" width="38" height="38" fill="#C44070" transform="rotate(32,1214,199)" />
+      <use href="#po" x="1310" y="170" width="28" height="28" color="#D4457A" transform="rotate(-22,1324,184)" />
+
+      <!-- Row 4 -->
+      <use href="#po" x="50" y="262" width="24" height="24" color="#C44070" transform="rotate(-18,62,274)" />
+      <use href="#pd" x="145" y="255" width="36" height="36" fill="#D4457A" transform="rotate(28,163,273)" />
+      <use href="#po" x="255" y="265" width="20" height="20" color="#B83568" transform="rotate(-10,265,275)" />
+      <use href="#pd" x="345" y="252" width="40" height="40" fill="#C44070" transform="rotate(20,365,272)" />
+      <use href="#po" x="460" y="263" width="30" height="30" color="#D4457A" transform="rotate(-32,475,278)" />
+      <use href="#pd" x="565" y="253" width="22" height="22" fill="#B83568" transform="rotate(15,576,264)" />
+      <use href="#po" x="660" y="264" width="38" height="38" color="#C44070" transform="rotate(-22,679,283)" />
+      <use href="#pd" x="775" y="252" width="28" height="28" fill="#D4457A" transform="rotate(10,789,266)" />
+      <use href="#po" x="870" y="263" width="34" height="34" color="#B83568" transform="rotate(-28,887,280)" />
+      <use href="#pd" x="980" y="253" width="18" height="18" fill="#C44070" transform="rotate(25,989,262)" />
+      <use href="#po" x="1065" y="263" width="32" height="32" color="#D4457A" transform="rotate(-15,1081,279)" />
+      <use href="#pd" x="1170" y="252" width="26" height="26" fill="#B83568" transform="rotate(30,1183,265)" />
+      <use href="#po" x="1265" y="263" width="36" height="36" color="#C44070" transform="rotate(-20,1283,281)" />
+      <use href="#pd" x="1375" y="253" width="24" height="24" fill="#D4457A" transform="rotate(12,1387,265)" />
+
+      <!-- Row 5 -->
+      <use href="#pd" x="8" y="345" width="38" height="38" fill="#D4457A" transform="rotate(22,27,364)" />
+      <use href="#po" x="110" y="338" width="26" height="26" color="#C44070" transform="rotate(-15,123,351)" />
+      <use href="#pd" x="210" y="348" width="20" height="20" fill="#B83568" transform="rotate(35,220,358)" />
+      <use href="#po" x="300" y="337" width="40" height="40" color="#D4457A" transform="rotate(-25,320,357)" />
+      <use href="#pd" x="415" y="347" width="30" height="30" fill="#C44070" transform="rotate(18,430,362)" />
+      <use href="#po" x="515" y="337" width="22" height="22" color="#B83568" transform="rotate(-10,526,348)" />
+      <use href="#pd" x="610" y="348" width="36" height="36" fill="#D4457A" transform="rotate(28,628,366)" />
+      <use href="#po" x="720" y="337" width="18" height="18" color="#C44070" transform="rotate(-30,729,346)" />
+      <use href="#pd" x="810" y="347" width="32" height="32" fill="#B83568" transform="rotate(12,826,363)" />
+      <use href="#po" x="910" y="338" width="38" height="38" color="#D4457A" transform="rotate(-20,929,357)" />
+      <use href="#pd" x="1020" y="347" width="24" height="24" fill="#C44070" transform="rotate(25,1032,359)" />
+      <use href="#po" x="1115" y="337" width="34" height="34" color="#B83568" transform="rotate(-18,1132,354)" />
+      <use href="#pd" x="1220" y="348" width="28" height="28" fill="#D4457A" transform="rotate(32,1234,362)" />
+      <use href="#po" x="1320" y="338" width="22" height="22" color="#C44070" transform="rotate(-12,1331,349)" />
+      <use href="#pd" x="1410" y="347" width="36" height="36" fill="#B83568" transform="rotate(20,1428,365)" />
+    </svg>
+
+    <div class="hero-inner">
+      <!-- Left: Copy -->
+      <div>
+        <div class="hero-pill anim-fade-up">
+          <span class="hero-pill-dot"></span>
+          <span class="hero-pill-text">Grooming · SPA · Озонотерапія · Великі породи</span>
+        </div>
+
+        <h1 class="hero-h1 anim-fade-up anim-delay-1">
+          Грумінг-салон<br>
+          <em>для вашого</em><br>
+          улюбленця.
+        </h1>
+
+        <p class="hero-sub anim-fade-up anim-delay-2">
+          Єдиний салон у центрі Черкас, де великі і малі отримують повноцінний SPA-догляд — включно з озонотерапією та
+          глибоким кондиціонуванням шерсті.
+        </p>
+
+        <div class="hero-cta anim-fade-up anim-delay-3">
+          <button class="btn btn-primary btn-lg" onclick="openBooking()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            Онлайн-запис
+          </button>
+          <a href="#pricing" class="btn btn-secondary btn-lg">Переглянути прайс</a>
+        </div>
+
+        <div class="hero-meta anim-fade-up anim-delay-4">
+          <span class="hero-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            4.9 · 340+ відгуків
+          </span>
+          <span class="hero-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            вул. Симоненка, 5
+          </span>
+          <span class="hero-meta-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Пн–Пт 9:00–18:00 · Сб 10:00–16:00
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Photo -->
+      <div class="hero-visual anim-fade-up anim-delay-2">
+        <div class="hero-photo-wrap">
+          <div class="hero-photo-placeholder">
+            <!-- Decorative grid lines -->
+            <svg width="100%" height="100%" style="position:absolute;inset:0;opacity:0.1" preserveAspectRatio="none">
+              <defs>
+                <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <rect width="3" height="8" fill="#FFD6E8" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#hatch)" />
+            </svg>
+            <!-- Paw icon placeholder -->
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="rgba(255,214,232,0.4)" style="position:relative">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            <div class="hero-photo-label">фото після грумінгу · 4:5</div>
+          </div>
+        </div>
+
+        <!-- Floating review card -->
+        <div class="hero-review-card" style="width: 247px">
+          <div class="hero-review-stars">★★★★★</div>
+          <div class="hero-review-text" style="width: 205px">«Барсик виходить звідти якийсь особливо щасливий 🥰»</div>
+          <div class="hero-review-author">— Олена, власниця йорка</div>
+        </div>
+
+        <!-- Floating stat badge -->
+        <div class="hero-stat-badge">
+          <div class="hero-stat-num">340+</div>
+          <div class="hero-stat-label">відгуків</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" onclick="document.getElementById('advantages').scrollIntoView()">
+      <div class="scroll-line"></div>
+      <span>Прокрути</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+     ADVANTAGES (quick bar)
+═════════════════════════════════════════════ -->
+  <section id="advantages" style="padding: 0; background: #fff; border-bottom: 1px solid var(--hp-rule-soft);">
+    <div style="max-width:1240px; margin:0 auto; padding:0 32px;">
+      <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:0;">
+        <div class="adv-item" style="padding:32px 20px; text-align:center; border-right:1px solid var(--hp-rule-soft);">
+          <div
+            style="width:40px;height:40px;border-radius:50%;background:var(--hp-rose-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </div>
+          <div style="font-weight:800;font-size:13px;color:var(--hp-ink);line-height:1.3;">Можливі великі породи</div>
+          <div style="font-size:11px;color:var(--hp-ink-3);margin-top:3px;">Лабрадор, ретривер</div>
+        </div>
+        <div class="adv-item" style="padding:32px 20px; text-align:center; border-right:1px solid var(--hp-rule-soft);">
+          <div
+            style="width:40px;height:40px;border-radius:50%;background:var(--hp-rose-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div style="font-weight:800;font-size:13px;color:var(--hp-ink);line-height:1.3;">Озонотерапія</div>
+          <div style="font-size:11px;color:var(--hp-ink-3);margin-top:3px;">SPA для шкіри та шерсті</div>
+        </div>
+        <div class="adv-item" style="padding:32px 20px; text-align:center; border-right:1px solid var(--hp-rule-soft);">
+          <div
+            style="width:40px;height:40px;border-radius:50%;background:var(--hp-rose-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
+          <div style="font-weight:800;font-size:13px;color:var(--hp-ink);line-height:1.3;">Центр міста</div>
+          <div style="font-size:11px;color:var(--hp-ink-3);margin-top:3px;">вул. Симоненка, 5</div>
+        </div>
+        <div class="adv-item" style="padding:32px 20px; text-align:center; border-right:1px solid var(--hp-rule-soft);">
+          <div
+            style="width:40px;height:40px;border-radius:50%;background:var(--hp-rose-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <div style="font-weight:800;font-size:13px;color:var(--hp-ink);line-height:1.3;">Сертифіковані майстри</div>
+          <div style="font-size:11px;color:var(--hp-ink-3);margin-top:3px;">Junior → Топ-грумер</div>
+        </div>
+        <div class="adv-item" style="padding:32px 20px; text-align:center; border-right:1px solid var(--hp-rule-soft);">
+          <div
+            style="width:40px;height:40px;border-radius:50%;background:var(--hp-rose-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
+          <div style="font-weight:800;font-size:13px;color:var(--hp-ink);line-height:1.3;">Запис онлайн</div>
+          <div style="font-size:11px;color:var(--hp-ink-3);margin-top:3px;">Доступно 24/7</div>
+        </div>
+        <div class="adv-item" style="padding:32px 20px; text-align:center;">
+          <div
+            style="width:40px;height:40px;border-radius:50%;background:var(--hp-rose-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+          </div>
+          <div style="font-weight:800;font-size:13px;color:var(--hp-ink);line-height:1.3;">Індивідуально</div>
+          <div style="font-size:11px;color:var(--hp-ink-3);margin-top:3px;">Один слот — одна тварина</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+     SERVICES
+═════════════════════════════════════════════ -->
+  <section id="services" class="section" style="background:#fff;" data-screen-label="Services">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">02 · Послуги</div>
+          <h2 class="section-title">Оберіть свій ритуал</h2>
+          <p class="section-sub">Від базової гігієни до повноцінного SPA з озоном — для кожної тварини знайдеться своє.
+          </p>
+        </div>
+        <a href="#pricing" class="btn btn-secondary btn-sm">Повний прайс →</a>
+      </div>
+
+      <!-- Category tabs -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;" id="svc-tabs">
+        <button class="svc-tab active" onclick="filterServices('all', this)">Всі послуги</button>
+        <button class="svc-tab" onclick="filterServices('complex', this)">Комплекс</button>
+        <button class="svc-tab" onclick="filterServices('spa', this)">SPA & Озон</button>
+        <button class="svc-tab" onclick="filterServices('hygiene', this)">Гігієна</button>
+        <button class="svc-tab" onclick="filterServices('large', this)">Великі породи</button>
+      </div>
+
+      <!-- Service cards grid -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" id="svc-grid">
+
+        <!-- Комплексна стрижка -->
+        <article class="svc-card" data-cat="complex"
+          style="background:#fff;border:1px solid var(--hp-rule-soft);border-radius:var(--hp-r-lg);overflow:hidden;box-shadow:var(--hp-shadow-xs);transition:all 0.25s var(--hp-ease);">
+          <div style="height:10px;background:linear-gradient(90deg,var(--hp-rose),var(--hp-rose-deep));"></div>
+          <div style="padding:22px;">
+            <div
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose);margin-bottom:8px;">
+              Комплекс · Основна послуга</div>
+            <h3
+              style="font-family:var(--hp-font-display);font-size:22px;font-weight:700;line-height:1.15;margin-bottom:10px;">
+              Комплексна стрижка</h3>
+            <p style="font-size:13px;color:var(--hp-ink-3);margin-bottom:12px;font-style:italic;">Iv San Bernard —
+              професійна косметика</p>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:18px;">
+              <div class="inc-item">Купання та сушіння феном / бустером</div>
+              <div class="inc-item">Доглядові засоби за типом шерсті</div>
+              <div class="inc-item">Pet-стрижка</div>
+              <div class="inc-item">Гігієнічна стрижка в комплексі</div>
+            </div>
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
+              <div>
+                <div
+                  style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;color:var(--hp-ink);letter-spacing:-0.02em;">
+                  Ціна за породою</div>
+                <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">⏱ залежить від розміру</div>
+              </div>
+              <button class="btn btn-ink btn-sm" onclick="openBooking()">Записатися →</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Гігієнічна стрижка — FEATURED -->
+        <article class="svc-card" data-cat="hygiene"
+          style="background:var(--hp-rose);border-radius:var(--hp-r-lg);overflow:hidden;box-shadow:var(--hp-shadow-md);transition:all 0.25s var(--hp-ease);">
+          <div style="padding:22px;color:#fff;">
+            <div
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:8px;">
+              Гігієна · Повний догляд</div>
+            <h3
+              style="font-family:var(--hp-font-display);font-size:22px;font-weight:700;line-height:1.15;margin-bottom:10px;color:#fff;">
+              Гігієнічна стрижка</h3>
+            <p style="font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:12px;">Процедура для підтримання гарного
+              самопочуття собаки</p>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:18px;">
+              <div class="inc-item-inv">Вичісування + купання</div>
+              <div class="inc-item-inv">Чистка і гоління вушок</div>
+              <div class="inc-item-inv">Когтекюр</div>
+              <div class="inc-item-inv">Гігієна інтимних зон</div>
+              <div class="inc-item-inv">Стрижка подушечок + «Відкрити очі»</div>
+            </div>
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid rgba(255,255,255,0.25);">
+              <div>
+                <div style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;letter-spacing:-0.02em;">
+                  Ціна за породою</div>
+                <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:2px;">⏱ залежить від розміру</div>
+              </div>
+              <button class="btn btn-sm"
+                style="background:#fff;color:var(--hp-rose);font-weight:700;border-radius:var(--hp-r-pill);"
+                onclick="openBooking()">Записатися →</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Фруктовий рай -->
+        <article class="svc-card" data-cat="spa"
+          style="background:#fff;border:1px solid var(--hp-rule-soft);border-radius:var(--hp-r-lg);overflow:hidden;box-shadow:var(--hp-shadow-xs);transition:all 0.25s var(--hp-ease);">
+          <div style="height:10px;background:linear-gradient(90deg,#FF8C42,#FFD166);"></div>
+          <div style="padding:22px;">
+            <div
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#FF8C42;margin-bottom:8px;">
+              SPA · Очищення</div>
+            <h3
+              style="font-family:var(--hp-font-display);font-size:22px;font-weight:700;line-height:1.15;margin-bottom:8px;">
+              Фруктовий рай</h3>
+            <p style="font-size:13px;color:var(--hp-rose);font-style:italic;margin-bottom:10px;">Фруктове Спа + Озон +
+              гідромасаж + масаж</p>
+            <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.55;margin-bottom:16px;">Антиоксидантна дія,
+              насичує шкіру та шерсть вітамінами, робить її м'якою та блискучою.</p>
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px dashed var(--hp-rule); opacity: 1; gap: 3px; padding: 11px 0px 0px; border-width: 0px">
+              <div>
+                <div
+                  style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;color:var(--hp-ink);letter-spacing:-0.02em;">
+                  650–950 ₴</div>
+                <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">⏱ 30–40 хв</div>
+              </div>
+              <button class="btn btn-ink btn-sm" onclick="openBooking()">Записатися →</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Релаксуюче Спа -->
+        <article class="svc-card" data-cat="spa"
+          style="background:#fff;border:1px solid var(--hp-rule-soft);border-radius:var(--hp-r-lg);overflow:hidden;box-shadow:var(--hp-shadow-xs);transition:all 0.25s var(--hp-ease);">
+          <div style="height:10px;background:linear-gradient(90deg,#9B5EA0,var(--hp-rose));"></div>
+          <div style="padding:22px;">
+            <div
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-lilac);margin-bottom:8px;">
+              SPA · Лікування</div>
+            <h3
+              style="font-family:var(--hp-font-display);font-size:22px;font-weight:700;line-height:1.15;margin-bottom:8px;">
+              Релаксуюче Спа</h3>
+            <p style="font-size:13px;color:var(--hp-rose);font-style:italic;margin-bottom:10px;">Мінеральна бомбочка +
+              Озон + гідромасаж</p>
+            <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.55;margin-bottom:16px;">Лікування запалення
+              шкіри, зволоження та оздоровлення.</p>
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
+              <div>
+                <div
+                  style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;color:var(--hp-ink);letter-spacing:-0.02em;">
+                  650–950 ₴</div>
+                <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">⏱ 30 хв</div>
+              </div>
+              <button class="btn btn-ink btn-sm" onclick="openBooking()">Записатися →</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Атамі Спа -->
+        <article class="svc-card" data-cat="spa"
+          style="background:#fff;border:1px solid var(--hp-rule-soft);border-radius:var(--hp-r-lg);overflow:hidden;box-shadow:var(--hp-shadow-xs);transition:all 0.25s var(--hp-ease);">
+          <div style="height:10px;background:linear-gradient(90deg,#4A9B8F,#2ECC71);"></div>
+          <div style="padding:22px;">
+            <div
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#4A9B8F;margin-bottom:8px;">
+              SPA · Ріст шерсті</div>
+            <h3
+              style="font-family:var(--hp-font-display);font-size:22px;font-weight:700;line-height:1.15;margin-bottom:8px;">
+              Атамі Спа</h3>
+            <p style="font-size:13px;color:var(--hp-rose);font-style:italic;margin-bottom:10px;">Шампунь + кондиціонер
+              лінії Atami + PH-баланс</p>
+            <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.55;margin-bottom:16px;">Для росту та укріплення
+              шерсті. При алопеціях. Підходить для всіх типів шерсті.</p>
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
+              <div>
+                <div
+                  style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;color:var(--hp-ink);letter-spacing:-0.02em;">
+                  700–1 000 ₴</div>
+                <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">⏱ 1 год</div>
+              </div>
+              <button class="btn btn-ink btn-sm" onclick="openBooking()">Записатися →</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Консультація -->
+        <article class="svc-card" data-cat="hygiene"
+          style="background:var(--hp-paper-2);border-radius:var(--hp-r-lg);overflow:hidden;box-shadow:var(--hp-shadow-xs);transition:all 0.25s var(--hp-ease);">
+          <div style="padding:22px;">
+            <div
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose);margin-bottom:8px;">
+              Консультація · Персонально</div>
+            <h3
+              style="font-family:var(--hp-font-display);font-size:22px;font-weight:700;line-height:1.15;margin-bottom:10px;">
+              Консультація від Happy Pets</h3>
+            <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.6;margin-bottom:16px;">Як розчісувати шерсть,
+              яку косметику обрати, як підтримувати бездоганний вигляд між візитами. Індивідуальний підхід з урахуванням
+              породи.</p>
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
+              <div>
+                <div
+                  style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;color:var(--hp-ink);letter-spacing:-0.02em;">
+                  500 ₴</div>
+                <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">⏱ індивідуально</div>
+              </div>
+              <button class="btn btn-ink btn-sm" onclick="openBooking()">Записатися →</button>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /grid -->
+
+      <!-- Додаткова послуга: Експрес линька -->
+      <div
+        style="margin-top:20px;background:linear-gradient(135deg,var(--hp-rose-soft),#EBDCEE);border-radius:var(--hp-r-lg);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border:1px solid rgba(155,94,160,0.15);">
+        <div style="flex:1;min-width:260px;">
+          <div
+            style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-lilac);margin-bottom:6px;">
+            Додаткова процедура</div>
+          <div
+            style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-ink);margin-bottom:6px;">
+            Експрес линька 🍃</div>
+          <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.55;">Спеціальна процедура до основного комплексу
+            в період линяння або для порід схильних до частих линьок. Професійна маска IvSB.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openBooking()">Дізнатися ціну →</button>
+      </div>
+
+
+      <!-- CTA bottom -->
+      <div style="margin-top:40px;text-align:center;">
+        <p style="color:var(--hp-ink-3);font-size:14px;margin-bottom:16px;">Не знайшли свою послугу? Напишіть нам —
+          підберемо потрібне</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-md" onclick="openBooking()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            Записатися онлайн
+          </button>
+          <a href="#pricing" class="btn btn-ghost btn-md">Дивитися повний прайс</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .svc-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--hp-shadow-md) !important;
+    }
+
+    .svc-tag {
+      display: inline-block;
+      padding: 3px 9px;
+      background: var(--hp-rose-soft);
+      color: var(--hp-rose-deep);
+      border-radius: var(--hp-r-pill);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .svc-tag-inv {
+      display: inline-block;
+      padding: 3px 9px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: var(--hp-r-pill);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .svc-tab {
+      padding: 8px 18px;
+      border-radius: var(--hp-r-pill);
+      background: var(--hp-paper-2);
+      color: var(--hp-ink-2);
+      border: none;
+      font-family: var(--hp-font-text);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s var(--hp-ease);
+    }
+
+    .svc-tab:hover {
+      background: var(--hp-rose-soft);
+      color: var(--hp-rose-deep);
+    }
+
+    .svc-tab.active {
+      background: var(--hp-rose);
+      color: #fff;
+    }
+
+    .inc-item {
+      font-size: 13px;
+      color: var(--hp-ink-2);
+      padding: 4px 0 4px 16px;
+      position: relative;
+    }
+
+    .inc-item::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--hp-rose);
+      font-weight: 800;
+    }
+
+    .inc-item-inv {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.88);
+      padding: 4px 0 4px 16px;
+      position: relative;
+    }
+
+    .inc-item-inv::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 800;
+    }
+  </style>
+
+  <script>
+    function filterServices(cat, btn) {
+      document.querySelectorAll('.svc-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.svc-card').forEach(card => {
+        const cats = card.dataset.cat || '';
+        card.style.display = (cat === 'all' || cats.includes(cat)) ? '' : 'none';
+      });
+    }
+  </script>
+
+  <!-- ════════════════════════════════════════════
+     TEAM
+═════════════════════════════════════════════ -->
+  <section id="team" class="section" style="background:var(--hp-paper-2);" data-screen-label="Team">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">03 · Команда</div>
+          <h2 class="section-title"
+            style="padding: 2px; margin: 12px 0px 14px -4px; border-radius: 0px; font-size: 42px">Знайомтесь з тими, хто
+            доглядає за вашим улюбленцем.</h2>
+          <p class="section-sub">Обери майстра під задачу — або довір вибір нам. Кожен запис індивідуальний.</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+
+        <!-- Анастасія -->
+        <div class="master-card" data-master="0" onclick="setMaster(0)">
+          <div class="master-photo" style="background:linear-gradient(135deg,#D4457A,#A6245A);">
+            <span style="font-family:var(--hp-font-display);font-weight:700;font-size:52px;color:#fff;">А</span>
+            <div class="master-badge" style="background:#fff;color:var(--hp-rose);">Топ-грумер</div>
+          </div>
+          <div class="master-body">
+            <h3 style="font-family:var(--hp-font-display);font-size:26px;font-weight:700;margin-bottom:4px;">Анастасія
+            </h3>
+            <div style="font-size:13px;color:var(--hp-rose);font-weight:700;margin-bottom:14px;">8 років досвіду</div>
+            <p style="font-size:14px;color:var(--hp-ink-2);line-height:1.6;margin-bottom:16px;">Спеціаліст зі складних
+              авторських стрижок. Великі породи, тримінг, навчання команди. Сертифіковано Wahl та Iv San Bernard.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+              <span class="svc-tag">Великі породи</span>
+              <span class="svc-tag">Авторська стрижка</span>
+              <span class="svc-tag">Тримінг</span>
+            </div>
+            <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;"
+              onclick="event.stopPropagation();openBooking()">
+              Записатися до Анастасії →
+            </button>
+          </div>
+        </div>
+
+        <!-- Іра -->
+        <div class="master-card master-card--active" data-master="1" onclick="setMaster(1)">
+          <div class="master-photo" style="background:linear-gradient(135deg,#9B5EA0,#6B3D70);">
+            <span style="font-family:var(--hp-font-display);font-weight:700;font-size:52px;color:#fff;">І</span>
+            <div class="master-badge" style="background:#fff;color:#6B3D70;">Грумер</div>
+          </div>
+          <div class="master-body">
+            <h3 style="font-family:var(--hp-font-display);font-size:26px;font-weight:700;margin-bottom:4px;">Іра</h3>
+            <div style="font-size:13px;color:var(--hp-lilac);font-weight:700;margin-bottom:14px;">4 роки досвіду</div>
+            <p style="font-size:14px;color:var(--hp-ink-2);line-height:1.6;margin-bottom:16px;">Породна стрижка,
+              делікатний підхід до боязких тварин. SPA-процедури та глибоке кондиціонування шерсті.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+              <span class="svc-tag">Породна стрижка</span>
+              <span class="svc-tag">SPA</span>
+              <span class="svc-tag">Боязкі тварини</span>
+            </div>
+            <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;"
+              onclick="event.stopPropagation();openBooking()">
+              Записатися до Іри →
+            </button>
+          </div>
+        </div>
+
+        <!-- Юлія -->
+        <div class="master-card" data-master="2" onclick="setMaster(2)">
+          <div class="master-photo" style="background:linear-gradient(135deg,#E67AA2,#C44E7A);">
+            <span style="font-family:var(--hp-font-display);font-weight:700;font-size:52px;color:#fff;">Ю</span>
+            <div class="master-badge" style="background:#fff;color:#C44E7A;">Junior</div>
+          </div>
+          <div class="master-body">
+            <h3 style="font-family:var(--hp-font-display);font-size:26px;font-weight:700;margin-bottom:4px;">Юлія</h3>
+            <div style="font-size:13px;color:#C44E7A;font-weight:700;margin-bottom:14px;">Молодший грумер</div>
+            <p style="font-size:14px;color:var(--hp-ink-2);line-height:1.6;margin-bottom:16px;">Гігієнічний груминг,
+              купання, догляд за котами. Проходить сертифікацію. Під наставництвом Анастасії.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+              <span class="svc-tag">Гігієна</span>
+              <span class="svc-tag">Купання</span>
+              <span class="svc-tag">Коти</span>
+            </div>
+            <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;"
+              onclick="event.stopPropagation();openBooking()">
+              Записатися до Юлії →
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Team CTA strip -->
+      <div
+        style="margin-top:40px;background:var(--hp-ink);border-radius:var(--hp-r-xl);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;">
+            Не знаєте до кого записатись?</div>
+          <div style="font-size:15px;color:rgba(255,255,255,0.72);">Напишіть нам у Telegram — підберемо майстра під
+            вашого улюбленця</div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="https://t.me/happy_pets_che" target="_blank" class="btn btn-sm"
+            style="background:var(--hp-rose);color:#fff;border-radius:var(--hp-r-pill);">Написати в Telegram</a>
+          <a href="https://instagram.com/happy_pets_che" target="_blank" class="btn btn-ghost btn-sm"
+            style="color:#fff;border-color:rgba(255,255,255,0.3);">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .master-card {
+      background: #fff;
+      border-radius: var(--hp-r-xl);
+      overflow: hidden;
+      border: 1px solid var(--hp-rule-soft);
+      box-shadow: var(--hp-shadow-xs);
+      cursor: pointer;
+      transition: all 0.25s var(--hp-ease);
+    }
+
+    .master-card:hover,
+    .master-card--active {
+      box-shadow: var(--hp-shadow-md);
+      transform: translateY(-4px);
+      border-color: var(--hp-rose-soft);
+    }
+
+    .master-photo {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .master-badge {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      padding: 5px 12px;
+      border-radius: var(--hp-r-pill);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .master-body {
+      padding: 24px;
+    }
+  </style>
+
+  <script>
+    function setMaster(idx) {
+      document.querySelectorAll('.master-card').forEach((c, i) => {
+        c.classList.toggle('master-card--active', i === idx);
+      });
+    }
+  </script>
+
+  <!-- ════════════════════════════════════════════
+     PRICE TABLE
+═════════════════════════════════════════════ -->
+  <section id="pricing" class="section" style="background:#fff;" data-screen-label="Pricing">
+    <div class="section-inner">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow">04 · Ціни</div>
+          <h2 class="section-title">Все прозоро — без сюрпризів</h2>
+          <p class="section-sub">Час фіксований. Ціна теж. Якщо є особливості — проговоримо до запису.</p>
+        </div>
+        <button class="btn btn-primary btn-md" onclick="openBooking()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <ellipse cx="12" cy="15" rx="6" ry="5" />
+            <circle cx="5.5" cy="9" r="2.2" />
+            <circle cx="10" cy="5.5" r="2" />
+            <circle cx="14" cy="5.5" r="2" />
+            <circle cx="18.5" cy="9" r="2.2" />
+          </svg>
+          Записатися
+        </button>
+      </div>
+
+      <!-- Column legend -->
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;gap:0;margin-bottom:0;">
+        <div style="padding:12px 16px;"></div>
+        <div style="padding:12px 16px;text-align:center;">
+          <div
+            style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;background:var(--hp-paper-2);padding:8px 16px;border-radius:var(--hp-r-md);">
+            <span
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-ink-3);">Гігієна</span>
+          </div>
+        </div>
+        <div style="padding:12px 16px;text-align:center;">
+          <div
+            style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;background:var(--hp-paper-2);padding:8px 16px;border-radius:var(--hp-r-md);">
+            <span
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-ink-3);">Комплекс</span>
+          </div>
+        </div>
+        <div style="padding:12px 16px;text-align:center;">
+          <div
+            style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;background:var(--hp-rose);padding:8px 16px;border-radius:var(--hp-r-md);">
+            <span
+              style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.8);">SPA
+              · Озон</span>
+          </div>
+        </div>
+        <div style="padding:12px 8px;text-align:right;">
+          <span
+            style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--hp-ink-3);">Час</span>
+        </div>
+      </div>
+
+      <!-- Price rows — реальні ціни Happy Pets -->
+      <div style="background:var(--hp-paper-2);border-radius:var(--hp-r-lg);overflow:hidden;">
+        <div class="price-row">
+          <div class="price-breed">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--hp-rose)" style="flex-shrink:0;margin-top:1px;">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            <div>
+              <div style="font-weight:700;">Йорк · Мальтезе · Чихуахуа</div>
+              <div style="font-size:12px;color:var(--hp-ink-3);">до 3 кг</div>
+            </div>
+          </div>
+          <div class="price-cell">від 350 ₴</div>
+          <div class="price-cell">від 650 ₴</div>
+          <div class="price-cell price-cell--accent">від 1 200 ₴</div>
+          <div class="price-time">1:00</div>
+        </div>
+        <div class="price-row">
+          <div class="price-breed">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--hp-rose)" style="flex-shrink:0;margin-top:1px;">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            <div>
+              <div style="font-weight:700;">Шпіц · Бішон · Пекінес</div>
+              <div style="font-size:12px;color:var(--hp-ink-3);">3–7 кг</div>
+            </div>
+          </div>
+          <div class="price-cell">від 400 ₴</div>
+          <div class="price-cell">від 800 ₴</div>
+          <div class="price-cell price-cell--accent">від 1 400 ₴</div>
+          <div class="price-time">1:30</div>
+        </div>
+        <div class="price-row">
+          <div class="price-breed">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--hp-rose)" style="flex-shrink:0;margin-top:1px;">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            <div>
+              <div style="font-weight:700;">Кокер · Пудель · Самоєд</div>
+              <div style="font-size:12px;color:var(--hp-ink-3);">7–15 кг</div>
+            </div>
+          </div>
+          <div class="price-cell">від 500 ₴</div>
+          <div class="price-cell">від 1 000 ₴</div>
+          <div class="price-cell price-cell--accent">від 1 700 ₴</div>
+          <div class="price-time">1:45</div>
+        </div>
+        <div class="price-row">
+          <div class="price-breed">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--hp-rose)" style="flex-shrink:0;margin-top:1px;">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            <div>
+              <div style="font-weight:700;">Лабрадор · Ретривер · Хаскі</div>
+              <div style="font-size:12px;color:var(--hp-ink-3);">15–35 кг</div>
+            </div>
+          </div>
+          <div class="price-cell">від 650 ₴</div>
+          <div class="price-cell">від 1 300 ₴</div>
+          <div class="price-cell price-cell--accent">від 2 000 ₴</div>
+          <div class="price-time">2:15</div>
+        </div>
+        <div class="price-row" style="border-bottom:none;">
+          <div class="price-breed">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--hp-rose)" style="flex-shrink:0;margin-top:1px;">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            <div>
+              <div style="font-weight:700;">Кіт · Всі породи</div>
+              <div style="font-size:12px;color:var(--hp-ink-3);">будь-який розмір</div>
+            </div>
+          </div>
+          <div class="price-cell">від 400 ₴</div>
+          <div class="price-cell">від 800 ₴</div>
+          <div class="price-cell price-cell--accent">від 1 200 ₴</div>
+          <div class="price-time">1:00</div>
+        </div>
+      </div>
+
+      <!-- SPA окремо -->
+      <div style="margin-top:16px;background:var(--hp-rose-soft);border-radius:var(--hp-r-lg);padding:24px 28px;">
+        <div
+          style="font-size:11px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose-deep);margin-bottom:16px;">
+          SPA-процедури окремо</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Фруктовий рай</div>
+            <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Фруктове Спа + Озон + гідромасаж</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
+              650–950 ₴ · 30–40 хв</div>
+          </div>
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Релаксуюче Спа</div>
+            <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Мінеральна бомбочка + Озон</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
+              650–950 ₴ · 30 хв</div>
+          </div>
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Атамі Спа</div>
+            <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Ріст і укріплення шерсті</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
+              700–1 000 ₴ · 1 год</div>
+          </div>
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Протизапальна ванна</div>
+            <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Глина + Озон + гідромасаж</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
+              700–1 000 ₴ · 1 год</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Гігієнічні послуги -->
+      <div style="margin-top:16px;background:var(--hp-paper-2);border-radius:var(--hp-r-lg);padding:24px 28px;">
+        <div
+          style="font-size:11px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose);margin-bottom:16px;">
+          Гігієнічні послуги окремо</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:13px;color:var(--hp-ink);">Когтекюр</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:18px;font-weight:700;color:var(--hp-rose-deep);margin-top:4px;">
+              від 100 ₴</div>
+          </div>
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:13px;color:var(--hp-ink);">Чистка вушок</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:18px;font-weight:700;color:var(--hp-rose-deep);margin-top:4px;">
+              від 100 ₴</div>
+          </div>
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:13px;color:var(--hp-ink);">Консультація</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:18px;font-weight:700;color:var(--hp-rose-deep);margin-top:4px;">
+              500 ₴</div>
+          </div>
+          <div class="hygiene-item">
+            <div style="font-weight:700;font-size:13px;color:var(--hp-ink);">Експрес линька</div>
+            <div
+              style="font-family:var(--hp-font-display);font-size:18px;font-weight:700;color:var(--hp-rose-deep);margin-top:4px;">
+              за запитом</div>
+          </div>
+        </div>
+      </div>
+
+
+      <p style="margin-top:16px;font-size:13px;color:var(--hp-ink-3);text-align:center;">
+        * Точна вартість залежить від стану шерсті та темпераменту тварини — уточнюємо до процедури.
+      </p>
+    </div>
+  </section>
+
+  <style>
+    .price-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 80px;
+      align-items: center;
+      gap: 0;
+      border-bottom: 1px dashed var(--hp-rule);
+      transition: background 0.15s;
+    }
+
+    .price-row:hover {
+      background: rgba(212, 69, 122, 0.04);
+    }
+
+    .price-breed {
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .price-cell {
+      padding: 18px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--hp-ink-2);
+    }
+
+    .price-cell--accent {
+      color: var(--hp-rose-deep);
+      font-size: 16px;
+    }
+
+    .price-time {
+      padding: 18px 16px;
+      text-align: right;
+      font-family: var(--hp-font-mono);
+      font-size: 13px;
+      color: var(--hp-ink-3);
+    }
+
+    .hygiene-item {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: var(--hp-r-md);
+    }
+  </style>
+
+  <!-- ════════════════════════════════════════════
+     BEFORE / AFTER GALLERY
+═════════════════════════════════════════════ -->
+  <section id="gallery" class="section" style="background:var(--hp-ink);" data-screen-label="Gallery">
+    <div class="section-inner">
+      <div class="section-header" style="margin-bottom:32px;">
+        <div>
+          <div class="section-eyebrow" style="color:var(--hp-rose-soft);">05 · Instagram</div>
+          <h2 class="section-title" style="color:#fff;">Останні роботи</h2>
+          <p class="section-sub" style="color:rgba(255,255,255,0.6);">Наші реальні роботи — щодня оновлюються в
+            Instagram</p>
+        </div>
+        <a href="https://instagram.com/happy_pets_che" target="_blank" class="btn btn-ghost btn-sm"
+          style="color:#fff;border-color:rgba(255,255,255,0.25);flex-shrink:0;display:flex;align-items:center;gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+          </svg>
+          перейти у instagram @happy_pets_che
+        </a>
+      </div>
+
+      <!-- Instagram feed -->
+      <div id="ig-feed" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+        <!-- Posts render here via JS -->
+      </div>
+
+      <!-- Loading state -->
+      <div id="ig-loading" style="text-align:center;padding:48px;color:rgba(255,255,255,0.4);">
+        <div
+          style="width:32px;height:32px;border:2px solid rgba(255,255,255,0.15);border-top-color:var(--hp-rose);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;">
+        </div>
+        <div style="font-size:13px;">Завантажуємо стрічку...</div>
+      </div>
+
+      <!-- Follow CTA -->
+      <div style="margin-top:20px;text-align:center;">
+        <a href="https://instagram.com/happy_pets_che" target="_blank" class="btn btn-sm"
+          style="background:linear-gradient(135deg,#E1306C,#833AB4);color:#fff;border-radius:var(--hp-r-pill);display:inline-flex;align-items:center;gap:8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+          </svg>
+          Підписатись на @happy_pets_che
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .ig-post {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.05);
+      transition: transform 0.2s var(--hp-ease), opacity 0.2s;
+    }
+
+    .ig-post:hover {
+      transform: scale(1.03);
+    }
+
+    .ig-post:hover .ig-overlay {
+      opacity: 1;
+    }
+
+    .ig-post img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ig-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(212, 69, 122, 0.25), rgba(26, 26, 46, 0.8));
+    }
+
+    .ig-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 26, 46, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .ig-overlay-icon {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+  </style>
+
+  <script>
+    // Instagram feed — підтягує 5 останніх постів через проксі
+    // Для продакшну потрібен Instagram Basic Display API токен
+    // Зараз показуємо мок-пости до підключення токену
+
+    const IG_TOKEN = ''; // вставте ваш Instagram API токен тут
+
+    async function loadIGFeed() {
+      const feed = document.getElementById('ig-feed');
+      const loading = document.getElementById('ig-loading');
+
+      if (IG_TOKEN) {
+        try {
+          const res = await fetch(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,thumbnail_url,permalink,like_count,comments_count&limit=5&access_token=${IG_TOKEN}`);
+          const data = await res.json();
+          if (data.data) {
+            renderIGPosts(data.data);
+            loading.style.display = 'none';
+            return;
+          }
+        } catch (e) { console.log('IG API error', e); }
+      }
+
+      // Мок-пости (заглушки до підключення API)
+      const mockPosts = [
+        { id: 1, label: 'Йорк · Комплекс', color: 'linear-gradient(135deg,#D4457A,#A6245A)', emoji: '🐾' },
+        { id: 2, label: 'Шпіц · SPA', color: 'linear-gradient(135deg,#9B5EA0,#6B3D70)', emoji: '✨' },
+        { id: 3, label: 'Лабрадор · Груминг', color: 'linear-gradient(135deg,#1A1A2E,#3D1A2E)', emoji: '🛁' },
+        { id: 4, label: 'Кіт · Гігієна', color: 'linear-gradient(135deg,#E67AA2,#C44E7A)', emoji: '🎀' },
+        { id: 5, label: 'Мальтезе · Комплекс', color: 'linear-gradient(135deg,#A6245A,#D4457A)', emoji: '💗' },
+      ];
+
+      feed.innerHTML = mockPosts.map(p => `
+      <a href="https://instagram.com/happy_pets_che" target="_blank" class="ig-post" title="${p.label}">
+        <div class="ig-placeholder" style="background:${p.color};">
+          <span style="font-size:32px;">${p.emoji}</span>
+          <span style="font-size:11px;color:rgba(255,255,255,0.6);font-weight:600;text-align:center;padding:0 8px;">${p.label}</span>
+        </div>
+        <div class="ig-overlay">
+          <div class="ig-overlay-icon">
+            <span>♥</span>
+            <span>@happy_pets_che</span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+      loading.style.display = 'none';
+    }
+
+    loadIGFeed();
+  </script>
+
+
+  <!-- ════════════════════════════════════════════
+     REVIEWS
+═════════════════════════════════════════════ -->
+  <section id="reviews" class="section" style="background:var(--hp-rose-soft);" data-screen-label="Reviews">
+    <div class="section-inner">
+      <div style="text-align:center;margin-bottom:48px;">
+        <div class="section-eyebrow">06 · Відгуки</div>
+        <h2 class="section-title">Що кажуть власники</h2>
+        <div
+          style="display:inline-flex;align-items:center;gap:10px;margin-top:12px;background:#fff;padding:10px 20px;border-radius:var(--hp-r-pill);box-shadow:var(--hp-shadow-sm);">
+          <span style="font-size:20px;color:var(--hp-warn);">★★★★★</span>
+          <span style="font-weight:800;font-size:16px;color:var(--hp-ink);">4.9</span>
+          <span style="color:var(--hp-ink-3);font-size:14px;">· 340+ відгуків</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" id="reviews-grid">
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Барсик виходить звідти якийсь особливо щасливий. Дуже ніжний підхід, пояснили що і як.
+            Тепер тільки сюди 🥰»</p>
+          <div class="review-footer">
+            <div class="review-avatar" style="background:var(--hp-rose);">О</div>
+            <div>
+              <div class="review-name">Олена</div>
+              <div class="review-meta">Власниця йорка · Instagram</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card review-card--featured">
+          <div class="review-stars" style="color:#FFE08A;">★★★★★</div>
+          <p class="review-text" style="color:rgba(255,255,255,0.9);">«Привели з Ірою нашого лабрадора — вперше в житті.
+            Анастасія чудово попрацювала. Він був такий спокійний! Рекомендую всім»</p>
+          <div class="review-footer">
+            <div class="review-avatar" style="background:rgba(255,255,255,0.25);color:#fff;">М</div>
+            <div>
+              <div class="review-name" style="color:#fff;">Марина</div>
+              <div class="review-meta" style="color:rgba(255,255,255,0.6);">Власниця лабрадора · Dikidi</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Озонотерапія для нашого шпіца — це просто магія. Шерсть стала шовковиста, перестала
+            лупитися. Дякуємо Ірі ✨»</p>
+          <div class="review-footer">
+            <div class="review-avatar" style="background:var(--hp-lilac);">Т</div>
+            <div>
+              <div class="review-name">Тетяна</div>
+              <div class="review-meta">Власниця шпіца · EasyWeek</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Дуже задоволена! Зручне розташування, завжди чисто. Юлія дуже уважна до нашого кота —
+            а він взагалі-то не любить чужих людей»</p>
+          <div class="review-footer">
+            <div class="review-avatar" style="background:#E67AA2;">К</div>
+            <div>
+              <div class="review-name">Катерина</div>
+              <div class="review-meta">Власниця кота · Google</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Привела двох мальтезе одночасно. Дозволили — без проблем. Обидва вийшли ідеальними.
+            Ціна абсолютно адекватна якості 💗»</p>
+          <div class="review-footer">
+            <div class="review-avatar" style="background:var(--hp-rose-deep);">Н</div>
+            <div>
+              <div class="review-name">Наталія</div>
+              <div class="review-meta">Власниця мальтезе · Instagram</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Записалися до Анастасії на авторську стрижку для нашого кокера — вийшло краще, ніж на
+            фото. Вже заплановано наступний візит 🐾»</p>
+          <div class="review-footer">
+            <div class="review-avatar" style="background:var(--hp-ink);">В</div>
+            <div>
+              <div class="review-name">Вікторія</div>
+              <div class="review-meta">Власниця кокера · Dikidi</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Review CTA -->
+      <div style="text-align:center;margin-top:40px;">
+        <button class="btn btn-primary btn-md" onclick="openBooking()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <ellipse cx="12" cy="15" rx="6" ry="5" />
+            <circle cx="5.5" cy="9" r="2.2" />
+            <circle cx="10" cy="5.5" r="2" />
+            <circle cx="14" cy="5.5" r="2" />
+            <circle cx="18.5" cy="9" r="2.2" />
+          </svg>
+          Записатися і переконатися особисто
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .review-card {
+      background: #fff;
+      border-radius: var(--hp-r-lg);
+      padding: 24px;
+      border: 1px solid var(--hp-rule-soft);
+      box-shadow: var(--hp-shadow-xs);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.25s var(--hp-ease);
+    }
+
+    .review-card:hover {
+      box-shadow: var(--hp-shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .review-card--featured {
+      background: var(--hp-rose);
+      border-color: transparent;
+      box-shadow: var(--hp-shadow-md);
+    }
+
+    .review-stars {
+      font-size: 17px;
+      color: var(--hp-warn);
+      letter-spacing: 2px;
+    }
+
+    .review-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--hp-ink-2);
+      font-style: italic;
+      flex: 1;
+    }
+
+    .review-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .review-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--hp-font-display);
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .review-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--hp-ink);
+    }
+
+    .review-meta {
+      font-size: 11px;
+      color: var(--hp-ink-3);
+      margin-top: 2px;
+    }
+  </style>
+
+  <!-- ════════════════════════════════════════════
+     FAQ
+═════════════════════════════════════════════ -->
+  <section id="faq" class="section" style="background:#fff;" data-screen-label="FAQ">
+    <div class="section-inner" style="max-width:880px;">
+      <div style="text-align:center;margin-bottom:48px;">
+        <div class="section-eyebrow">07 · FAQ</div>
+        <h2 class="section-title">Часті запитання</h2>
+        <p class="section-sub" style="margin:12px auto 0;">Якщо не знайшли відповідь — напишіть нам у Telegram,
+          відповімо швидко.</p>
+      </div>
+
+      <div id="faq-list" style="display:flex;flex-direction:column;gap:4px;">
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span>Як підготувати собаку до першого грумінгу?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">
+            <p>За кілька днів до візиту розчешіть шерсть вдома, щоб тварина звикла до торкань. Не годуйте щільно за 1–2
+              год до приходу — це зменшить стрес. Візьміть улюблене ласощо — воно допоможе майстру познайомитися. Якщо
+              собака ніколи не стриглася — почніть із гігієнічної стрижки, не комплексу.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span>Чи можна бути присутнім під час процедури?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">
+            <p>Як правило — ні, і ось чому: більшість собак нервуються і тягнуться до господаря, що ускладнює роботу
+              майстра і може травмувати тварину. Ми обов'язково надішлемо фото або коротке відео в процесі 🐾</p>
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span>Що таке озонотерапія і кому вона потрібна?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">
+            <p>Озонотерапія — це обробка шкіри та шерсті озоно-киснневою сумішшю. Вона дезінфікує, усуває лупу, лікує
+              подразнення та надає шерсті об'єм і блиск. Рекомендуємо собакам з алергією, себореєю, запахом або тьмяною
+              шерстю. Процедура безпечна і приємна — більшість тварин розслабляються під час неї ✨</p>
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span>Чи працюєте з агресивними або нервовими тваринами?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">
+            <p>Так, маємо досвід роботи з боязкими та неспокійними тваринами. Про особливості обов'язково попередьте при
+              записі — оберемо відповідного майстра, виділимо більше часу та підготуємо спокійне середовище. З
+              тваринами, що проявляють агресію до людей, працюємо тільки після окремої консультації.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span>Як скасувати або перенести запис?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">
+            <p>Будь ласка, повідомте нас не менше ніж за 3 години до запису — через EasyWeek, Telegram або телефоном.
+              Пізніше скасування блокує слот для іншого клієнта. Перенести запис можна в будь-який час через особистий
+              кабінет EasyWeek.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q">
+            <span>Як часто потрібно стригти собаку?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">
+            <p>Залежить від породи і типу шерсті. Декоративні породи (йорк, мальтезе, шпіц) — кожні 6–8 тижнів. Кокери,
+              пуделі — кожні 8–10 тижнів. Короткошерстим великим породам — гігієна раз на 2–3 місяці. Ми нагадаємо про
+              наступний візит через EasyWeek 🗓</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .faq-item {
+      border-radius: var(--hp-r-md);
+      border: 1px solid var(--hp-rule-soft);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s var(--hp-ease);
+    }
+
+    .faq-item:hover {
+      border-color: var(--hp-rose-soft);
+      background: var(--hp-paper);
+    }
+
+    .faq-item.open {
+      border-color: var(--hp-rose-soft);
+    }
+
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--hp-ink);
+      user-select: none;
+    }
+
+    .faq-icon {
+      font-size: 22px;
+      color: var(--hp-rose);
+      font-weight: 400;
+      flex-shrink: 0;
+      transition: transform 0.2s var(--hp-ease);
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s var(--hp-ease);
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 300px;
+    }
+
+    .faq-a p {
+      padding: 0 24px 20px;
+      font-size: 14px;
+      color: var(--hp-ink-2);
+      line-height: 1.7;
+      margin: 0;
+    }
+  </style>
+
+  <script>
+    function toggleFaq(el) {
+      const wasOpen = el.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) el.classList.add('open');
+    }
+  </script>
+
+  <!-- ════════════════════════════════════════════
+     CONTACTS
+═════════════════════════════════════════════ -->
+  <section id="contacts" class="section" style="background:var(--hp-paper-2);" data-screen-label="Contacts">
+    <div class="section-inner">
+      <div class="section-header" style="margin-bottom:40px;">
+        <div>
+          <div class="section-eyebrow">08 · Контакти</div>
+          <h2 class="section-title">Ми поруч — в центрі Черкас</h2>
+        </div>
+        <button class="btn btn-primary btn-md" onclick="openBooking()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <ellipse cx="12" cy="15" rx="6" ry="5" />
+            <circle cx="5.5" cy="9" r="2.2" />
+            <circle cx="10" cy="5.5" r="2" />
+            <circle cx="14" cy="5.5" r="2" />
+            <circle cx="18.5" cy="9" r="2.2" />
+          </svg>
+          Записатися
+        </button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:32px;align-items:start;">
+
+        <!-- Info cards -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div>
+              <div
+                style="font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--hp-rose);margin-bottom:4px;">
+                Адреса</div>
+              <div style="font-weight:700;font-size:15px;color:var(--hp-ink);">вул. Симоненка, 5</div>
+              <div style="font-size:13px;color:var(--hp-ink-3);margin-top:2px;">Черкаси, центр міста</div>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div>
+              <div
+                style="font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--hp-rose);margin-bottom:4px;">
+                Години роботи</div>
+              <div style="font-size:14px;color:var(--hp-ink);line-height:1.8;">
+                <div style="display:flex;justify-content:space-between;max-width:220px;"><span
+                    style="font-weight:600;">Пн – Пт</span><span>9:00 – 18:00</span></div>
+                <div style="display:flex;justify-content:space-between;max-width:220px;"><span
+                    style="font-weight:600;">Субота</span><span>10:00 – 16:00</span></div>
+                <div style="display:flex;justify-content:space-between;max-width:220px;color:var(--hp-ink-3);"><span
+                    style="font-weight:600;">Неділя</span><span>Вихідний</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hp-rose)" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.42a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.88a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z" />
+              </svg>
+            </div>
+            <div>
+              <div
+                style="font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--hp-rose);margin-bottom:8px;">
+                Зв'язок</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <a href="tel:+380000000000" class="contact-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.42a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.88a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z" />
+                  </svg>
+                  +380 XX XXX XX XX
+                </a>
+                <a href="https://t.me/happy_pets_che" target="_blank" class="contact-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                  Telegram
+                </a>
+                <a href="https://instagram.com/happy_pets_che" target="_blank" class="contact-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  @happy_pets_che
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-md" style="width:100%;justify-content:center;" onclick="openBooking()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <ellipse cx="12" cy="15" rx="6" ry="5" />
+              <circle cx="5.5" cy="9" r="2.2" />
+              <circle cx="10" cy="5.5" r="2" />
+              <circle cx="14" cy="5.5" r="2" />
+              <circle cx="18.5" cy="9" r="2.2" />
+            </svg>
+            Онлайн-запис
+          </button>
+        </div>
+
+        <!-- Map placeholder -->
+        <div
+          style="background:var(--hp-ink);border-radius:var(--hp-r-xl);overflow:hidden;height:420px;position:relative;box-shadow:var(--hp-shadow-md);">
+          <!-- Decorative map grid -->
+          <svg width="100%" height="100%" style="position:absolute;inset:0;opacity:0.15">
+            <defs>
+              <pattern id="map-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#FFD6E8" stroke-width="0.5" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#map-grid)" />
+          </svg>
+          <!-- Streets simulation -->
+          <svg width="100%" height="100%" style="position: absolute; inset: 0; opacity: 0.2; height: 371px">
+            <line x1="0" y1="45%" x2="100%" y2="45%" stroke="#FFD6E8" stroke-width="3" />
+            <line x1="0" y1="70%" x2="100%" y2="70%" stroke="#FFD6E8" stroke-width="1.5" />
+            <line x1="35%" y1="0" x2="35%" y2="100%" stroke="#FFD6E8" stroke-width="2.5" />
+            <line x1="65%" y1="0" x2="65%" y2="100%" stroke="#FFD6E8" stroke-width="1.5" />
+          </svg>
+          <!-- Pin -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);text-align:center;">
+            <div
+              style="width:52px;height:52px;background:var(--hp-rose);border-radius:50% 50% 50% 0;transform:rotate(-45deg);margin:0 auto;box-shadow:var(--hp-shadow-lg);display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="white" style="transform:rotate(45deg);">
+                <ellipse cx="12" cy="15" rx="6" ry="5" />
+                <circle cx="5.5" cy="9" r="2.2" />
+                <circle cx="10" cy="5.5" r="2" />
+                <circle cx="14" cy="5.5" r="2" />
+                <circle cx="18.5" cy="9" r="2.2" />
+              </svg>
+            </div>
+            <div
+              style="margin-top:12px;background:#fff;border-radius:var(--hp-r-md);padding:10px 16px;box-shadow:var(--hp-shadow-md);white-space:nowrap;">
+              <div style="font-weight:800;font-size:14px;color:var(--hp-ink);">Happy Pets</div>
+              <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">вул. Симоненка, 5</div>
+            </div>
+          </div>
+          <!-- Google Maps button -->
+          <a href="https://maps.google.com/?q=Черкаси+вул+Симоненка+5" target="_blank"
+            style="position:absolute;bottom:16px;right:16px;" class="btn btn-sm"
+            style="background:rgba(255,255,255,0.9);color:var(--hp-ink);border-radius:var(--hp-r-md);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            Відкрити в Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .contact-card {
+      background: #fff;
+      border-radius: var(--hp-r-lg);
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      border: 1px solid var(--hp-rule-soft);
+      box-shadow: var(--hp-shadow-xs);
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--hp-rose-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--hp-rose-deep);
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .contact-link:hover {
+      color: var(--hp-rose);
+    }
+  </style>
+
+  <!-- ════════════════════════════════════════════
+     FOOTER
+═════════════════════════════════════════════ -->
+  <footer id="footer" style="background:var(--hp-ink);color:#fff;padding:64px 0 0;" data-screen-label="Footer">
+
+
+    <div style="max-width:1240px;margin:0 auto;padding:0 32px;">
+      <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;">
+
+        <!-- Brand column -->
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <img src="assets/logo-official.jpg" alt="Happy Pets"
+              style="width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);">
+            <div>
+              <div style="font-family:var(--hp-font-display);font-weight:700;font-size:22px;">Happy Pets</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:1px;letter-spacing:0.08em;">GROOMING &
+                SPA · ЧЕРКАСИ</div>
+            </div>
+          </div>
+          <p style="font-size:14px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:300px;margin-bottom:20px;">
+            Делікатний груминг і SPA для собак і котів у центрі Черкас. Кожна тварина отримує повну увагу і ще більше
+            любові зверху 🐾
+          </p>
+          <div style="display:flex;gap:10px;">
+            <a href="https://instagram.com/happy_pets_che" target="_blank"
+              style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;transition:background 0.2s;"
+              onmouseover="this.style.background='var(--hp-rose)'"
+              onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"
+                stroke-linecap="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </a>
+            <a href="https://t.me/happy_pets_che" target="_blank"
+              style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;transition:background 0.2s;"
+              onmouseover="this.style.background='var(--hp-rose)'"
+              onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"
+                stroke-linecap="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Послуги -->
+        <div>
+          <div
+            style="font-size:11px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose-soft);margin-bottom:16px;">
+            Послуги</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+            <li><a href="#services" class="footer-link">Комплексна стрижка</a></li>
+            <li><a href="#services" class="footer-link">SPA з озонотерапією</a></li>
+            <li><a href="#services" class="footer-link">Гігієнічна стрижка</a></li>
+            <li><a href="#services" class="footer-link">Великі породи</a></li>
+            <li><a href="#pricing" class="footer-link">Повний прайс</a></li>
+          </ul>
+        </div>
+
+        <!-- Салон -->
+        <div>
+          <div
+            style="font-size:11px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose-soft);margin-bottom:16px;">
+            Салон</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+            <li><a href="#team" class="footer-link">Команда майстрів</a></li>
+            <li><a href="#gallery" class="footer-link">Галерея робіт</a></li>
+            <li><a href="#reviews" class="footer-link">Відгуки</a></li>
+            <li><a href="#faq" class="footer-link">FAQ</a></li>
+            <li><a href="#contacts" class="footer-link">Контакти</a></li>
+          </ul>
+        </div>
+
+        <!-- Запис -->
+        <div>
+          <div
+            style="font-size:11px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose-soft);margin-bottom:16px;">
+            Запис</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.9;">
+            <div>вул. Симоненка, 5</div>
+            <div>Черкаси</div>
+          </div>
+          <div style="margin-top:12px;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.9;">
+            <div>Пн–Пт 9:00–18:00</div>
+            <div>Сб 10:00–16:00</div>
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-top:16px;" onclick="openBooking()">Записатися
+            онлайн</button>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div
+        style="border-top:1px solid rgba(255,255,255,0.1);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);">
+          © 2026 Happy Pets Grooming &amp; Spa Salon · Черкаси · З любов'ю до кожної лапки 🐾Created by Taras Lukashyk
+        </div>
+        <div style="display:flex;gap:20px;">
+          <a href="https://booking.easyweek.com.ua/happy-pets-grooming-187402" target="_blank"
+            style="font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.15s;"
+            onmouseover="this.style.color='var(--hp-rose-soft)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.4)'">EasyWeek</a>
+          <a href="https://instagram.com/happy_pets_che" target="_blank"
+            style="font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.15s;"
+            onmouseover="this.style.color='var(--hp-rose-soft)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.4)'">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    .footer-link {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.65);
+      text-decoration: none;
+      transition: color 0.15s;
+      display: inline-block;
+    }
+
+    .footer-link:hover {
+      color: var(--hp-rose-soft);
+    }
+  </style>
+
+  <!-- ════════════════════════════════════════════
+     BOOKING MODAL — MULTI-STEP
+═════════════════════════════════════════════ -->
+  <div id="booking-overlay"
+    style="display:none;position:fixed;inset:0;background:rgba(26,26,46,0.6);z-index:200;backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+    <div id="booking-modal"
+      style="background:#fff;border-radius:var(--hp-r-xl);width:540px;max-width:94vw;box-shadow:var(--hp-shadow-xl);overflow:hidden;animation:fadeUp 0.3s var(--hp-ease);">
+      <div style="height:3px;background:var(--hp-rose-soft);">
+        <div id="booking-progress"
+          style="height:100%;background:var(--hp-rose);transition:width 0.4s var(--hp-ease);width:33%;"></div>
+      </div>
+      <div style="padding:28px 32px 0;display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div id="booking-step-label"
+            style="font-size:11px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--hp-rose);">
+            Крок 1 з 3</div>
+          <h3 id="booking-title"
+            style="font-family:var(--hp-font-display);font-size:28px;font-weight:700;margin-top:6px;color:var(--hp-ink);">
+            Познайомимось?</h3>
+        </div>
+        <button onclick="closeBooking()"
+          style="width:36px;height:36px;border-radius:50%;border:1px solid var(--hp-rule-soft);background:#fff;cursor:pointer;font-size:20px;color:var(--hp-ink-3);line-height:1;flex-shrink:0;">×</button>
+      </div>
+      <div style="padding:20px 32px 28px;">
+        <!-- Step 1 -->
+        <div id="booking-s1">
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+              <label
+                style="font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--hp-ink-2);display:block;margin-bottom:6px;">Ваше
+                ім'я</label>
+              <input id="b-name" type="text" placeholder="Як до вас звертатися?"
+                style="width:100%;padding:13px 16px;border-radius:var(--hp-r-md);border:1.5px solid var(--hp-rule);background:#fff;font-family:var(--hp-font-text);font-size:15px;color:var(--hp-ink);outline:none;transition:border-color 0.2s;"
+                onfocus="this.style.borderColor='var(--hp-rose)'" onblur="this.style.borderColor='var(--hp-rule)'">
+            </div>
+            <div>
+              <label
+                style="font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--hp-ink-2);display:block;margin-bottom:6px;">Телефон</label>
+              <input id="b-phone" type="tel" placeholder="+380 XX XXX XX XX"
+                style="width:100%;padding:13px 16px;border-radius:var(--hp-r-md);border:1.5px solid var(--hp-rule);background:#fff;font-family:var(--hp-font-text);font-size:15px;color:var(--hp-ink);outline:none;transition:border-color 0.2s;"
+                onfocus="this.style.borderColor='var(--hp-rose)'" onblur="this.style.borderColor='var(--hp-rule)'">
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div id="booking-s2" style="display:none;">
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div>
+              <label
+                style="font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--hp-ink-2);display:block;margin-bottom:6px;">Ім'я
+                тварини</label>
+              <input id="b-pet" type="text" placeholder="Барсик, Мурка, Персик..."
+                style="width:100%;padding:13px 16px;border-radius:var(--hp-r-md);border:1.5px solid var(--hp-rule);background:#fff;font-family:var(--hp-font-text);font-size:15px;color:var(--hp-ink);outline:none;transition:border-color 0.2s;"
+                onfocus="this.style.borderColor='var(--hp-rose)'" onblur="this.style.borderColor='var(--hp-rule)'">
+            </div>
+            <div>
+              <label
+                style="font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--hp-ink-2);display:block;margin-bottom:8px;">Порода</label>
+              <div style="display:flex;gap:7px;flex-wrap:wrap;" id="breed-chips">
+                <button class="breed-chip" onclick="selectBreed(this)">Йорк</button>
+                <button class="breed-chip" onclick="selectBreed(this)">Мальтезе</button>
+                <button class="breed-chip" onclick="selectBreed(this)">Шпіц</button>
+                <button class="breed-chip" onclick="selectBreed(this)">Пудель</button>
+                <button class="breed-chip" onclick="selectBreed(this)">Лабрадор</button>
+                <button class="breed-chip" onclick="selectBreed(this)">Хаскі</button>
+                <button class="breed-chip" onclick="selectBreed(this)">Кіт</button>
+                <button class="breed-chip" onclick="selectBreed(this)">Інша порода</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div id="booking-s3" style="display:none;">
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <label
+              style="font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--hp-ink-2);display:block;margin-bottom:2px;">Послуга</label>
+            <div class="svc-pick" onclick="selectSvc(this)">
+              <span style="font-weight:700;font-size:14px;color:var(--hp-ink);">Гігієнічна стрижка</span>
+              <span style="font-size:12px;color:var(--hp-ink-3);font-family:var(--hp-font-mono);">від 400 ₴ · 45
+                хв</span>
+            </div>
+            <div class="svc-pick" onclick="selectSvc(this)">
+              <span style="font-weight:700;font-size:14px;color:var(--hp-ink);">Повний груминг</span>
+              <span style="font-size:12px;color:var(--hp-ink-3);font-family:var(--hp-font-mono);">від 750 ₴ · 1 год 15
+                хв</span>
+            </div>
+            <div class="svc-pick" onclick="selectSvc(this)">
+              <span style="font-weight:700;font-size:14px;color:var(--hp-ink);">SPA з озонотерапією</span>
+              <span style="font-size:12px;color:var(--hp-ink-3);font-family:var(--hp-font-mono);">від 1 200 ₴ · 2
+                год</span>
+            </div>
+            <div
+              style="margin-top:4px;padding:14px;background:var(--hp-rose-soft);border-radius:var(--hp-r-md);text-align:center;">
+              <div style="font-size:13px;color:var(--hp-rose-deep);">Або записуйтесь напряму через EasyWeek 👇</div>
+              <a href="https://booking.easyweek.com.ua/happy-pets-grooming-187402" target="_blank"
+                class="btn btn-primary btn-sm" style="margin-top:10px;display:inline-flex;">Перейти до EasyWeek</a>
+            </div>
+          </div>
+        </div>
+        <!-- Nav -->
+        <div
+          style="margin-top:24px;padding-top:20px;border-top:1px dashed var(--hp-rule);display:flex;justify-content:space-between;align-items:center;">
+          <button id="booking-back" onclick="bookingBack()" style="display:none;" class="btn btn-ghost btn-sm">←
+            Назад</button>
+          <div style="flex:1;"></div>
+          <button id="booking-next" onclick="bookingNext()" class="btn btn-primary btn-md">Далі →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+     FLOATING FAB — MESSENGER HUB
+═════════════════════════════════════════════ -->
+
+  <!-- Chat bubble (text input popup) -->
+  <div id="fab-chat"
+    style="display:none;position:fixed;bottom:90px;right:24px;z-index:151;width:300px;background:#fff;border-radius:var(--hp-r-xl);box-shadow:var(--hp-shadow-xl);overflow:hidden;animation:fadeUp 0.25s var(--hp-ease);">
+    <div
+      style="background:var(--hp-rose);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="assets/logo-official.jpg" alt=""
+          style="width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);">
+        <div>
+          <div style="font-weight:700;font-size:14px;color:#fff;">Happy Pets</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.75);display:flex;align-items:center;gap:4px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;"></span>
+            Онлайн · відповідаємо швидко
+          </div>
+        </div>
+      </div>
+      <button onclick="closeFabChat()"
+        style="background:rgba(255,255,255,0.2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;color:#fff;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+    <!-- Chat bubble -->
+    <div style="padding: 15px 16px 24px 2px; height: 143px; width: 249px">
+      <div
+        style="background: var(--hp-paper-2); border-radius: 12px 12px 12px 2px; padding: 8px 15px 12px 17px; font-size: 14px; color: var(--hp-ink); line-height: 1.3; display: inline-block; max-width: 90%; border-width: 0px; border-style: solid; margin: 2px; height: 104px; width: 210px; letter-spacing: -0.4px">
+        Привіт! 🐾 Чим можемо допомогти? Запишіть своє питання і ми відповімо в Telegram або Instagram.
+      </div>
+      <div style="font-size:10px;color:var(--hp-ink-3);margin-top:4px;margin-left:4px;">Happy Pets · щойно</div>
+    </div>
+    <!-- Input area -->
+    <div style="padding: 8px 12px 12px; display: flex; gap: 4px; align-items: flex-end">
+      <textarea id="fab-msg" placeholder="Напишіть повідомлення..." rows="2"
+        style="flex:1;padding:10px 12px;border-radius:var(--hp-r-md);border:1.5px solid var(--hp-rule-soft);background:var(--hp-paper);font-family:var(--hp-font-text);font-size:14px;color:var(--hp-ink);resize:none;outline:none;transition:border-color 0.2s;line-height:1.4;"
+        onfocus="this.style.borderColor='var(--hp-rose)'"
+        onblur="this.style.borderColor='var(--hp-rule-soft)'"></textarea>
+      <button onclick="sendFabMsg()"
+        style="width:40px;height:40px;border-radius:50%;background:var(--hp-rose);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s var(--hp-ease);"
+        onmouseover="this.style.background='var(--hp-rose-deep)'" onmouseout="this.style.background='var(--hp-rose)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13" />
+          <polygon points="22 2 15 22 11 13 2 9 22 2" />
+        </svg>
+      </button>
+    </div>
+    <!-- Voice message hint -->
+    <div style="padding:0 12px 12px;display:flex;align-items:center;gap:10px;">
+      <div style="flex:1;height:1px;background:var(--hp-rule-soft);"></div>
+      <span style="font-size:11px;color:var(--hp-ink-3);white-space:nowrap;">або залишайте голосове</span>
+      <div style="flex:1;height:1px;background:var(--hp-rule-soft);"></div>
+    </div>
+    <div style="padding:0 12px 14px;display:flex;justify-content:center;">
+      <a href="https://t.me/happy_pets_che" target="_blank" id="fab-voice-btn"
+        style="display:flex;align-items:center;gap:10px;padding:10px 20px;border-radius:var(--hp-r-pill);background:var(--hp-rose-soft);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s var(--hp-ease);"
+        onmouseover="this.style.background='var(--hp-rose-100)'"
+        onmouseout="this.style.background='var(--hp-rose-soft)'">
+        <div id="fab-mic-wrap"
+          style="width:32px;height:32px;border-radius:50%;background:var(--hp-rose);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
+          </svg>
+        </div>
+        <span style="font-size:13px;font-weight:700;color:var(--hp-rose-deep);">Голосове в Telegram</span>
+      </a>
+    </div>
+    <!-- Quick channel buttons -->
+    <div style="padding:0 12px 14px;display:flex;gap:7px;">
+      <a href="https://t.me/happy_pets_che" target="_blank"
+        style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:var(--hp-r-md);background:#E8F4FD;color:#229ED9;font-size:12px;font-weight:700;text-decoration:none;transition:background 0.15s;"
+        onmouseover="this.style.background='#D0EAF9'" onmouseout="this.style.background='#E8F4FD'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+        </svg>
+        Telegram
+      </a>
+      <a href="https://instagram.com/happy_pets_che" target="_blank"
+        style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:var(--hp-r-md);background:#FCE8F3;color:#E1306C;font-size:12px;font-weight:700;text-decoration:none;transition:background 0.15s;"
+        onmouseover="this.style.background='#F9D0E7'" onmouseout="this.style.background='#FCE8F3'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="2" width="20" height="20" rx="5" />
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+        </svg>
+        Instagram
+      </a>
+      <a href="tel:+380000000000"
+        style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:var(--hp-r-md);background:#EEFAF3;color:#3F8F5E;font-size:12px;font-weight:700;text-decoration:none;transition:background 0.15s;"
+        onmouseover="this.style.background='#D9F3E5'" onmouseout="this.style.background='#EEFAF3'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path
+            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.42a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.88a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z" />
+        </svg>
+        Дзвінок
+      </a>
+    </div>
+  </div>
+
+  <!-- FAB button -->
+  <div id="fab-wrap"
+    style="position:fixed;bottom:24px;right:24px;z-index:150;display:flex;flex-direction:column;align-items:flex-end;gap:0;">
+    <!-- Notification dot -->
+    <div id="fab-notif"
+      style="position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:#4ade80;border:2px solid #fff;z-index:1;animation:pulse 2.5s infinite;">
+    </div>
+
+    <button id="fab-main" onclick="toggleFabChat()"
+      style="width:56px;height:56px;border-radius:50%;background:var(--hp-rose);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(212,69,122,0.45);display:flex;align-items:center;justify-content:center;transition:all 0.25s var(--hp-ease);position:relative;"
+      title="Написати нам">
+      <svg id="fab-icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
+      <svg id="fab-icon-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+        stroke-linecap="round" style="display:none;">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <style>
+    .breed-chip {
+      padding: 8px 14px;
+      border-radius: var(--hp-r-pill);
+      background: var(--hp-paper-2);
+      color: var(--hp-ink-2);
+      border: 1px solid var(--hp-rule-soft);
+      font-family: var(--hp-font-text);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .breed-chip.selected {
+      background: var(--hp-rose);
+      color: #fff;
+      border-color: var(--hp-rose);
+    }
+
+    .svc-pick {
+      padding: 14px 18px;
+      border-radius: var(--hp-r-md);
+      border: 1.5px solid var(--hp-rule-soft);
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s;
+    }
+
+    .svc-pick.selected {
+      border-color: var(--hp-rose);
+      background: var(--hp-rose-50);
+    }
+
+    .svc-pick:hover {
+      border-color: var(--hp-rose-soft);
+    }
+  </style>
+  <script>
+    // Nav scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Booking multi-step
+    let bookingStep = 1;
+    const stepTitles = ['Познайомимось?', 'Розкажіть про улюбленця', 'Оберіть послугу 🐾'];
+
+    function openBooking() {
+      bookingStep = 1;
+      updateBookingStep();
+      document.getElementById('booking-overlay').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      closeFab();
+    }
+    function closeBooking() {
+      document.getElementById('booking-overlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    function updateBookingStep() {
+      ['s1', 's2', 's3'].forEach((s, i) => {
+        document.getElementById('booking-' + s).style.display = i + 1 === bookingStep ? '' : 'none';
+      });
+      document.getElementById('booking-step-label').textContent = 'Крок ' + bookingStep + ' з 3';
+      document.getElementById('booking-title').textContent = stepTitles[bookingStep - 1];
+      document.getElementById('booking-progress').style.width = (bookingStep / 3 * 100) + '%';
+      document.getElementById('booking-back').style.display = bookingStep > 1 ? '' : 'none';
+      document.getElementById('booking-next').textContent = bookingStep === 3 ? '✓ Підтвердити' : 'Далі →';
+    }
+    function bookingNext() {
+      if (bookingStep < 3) { bookingStep++; updateBookingStep(); }
+      else { closeBooking(); }
+    }
+    function bookingBack() {
+      if (bookingStep > 1) { bookingStep--; updateBookingStep(); }
+    }
+    function selectBreed(el) {
+      document.querySelectorAll('.breed-chip').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    function selectSvc(el) {
+      document.querySelectorAll('.svc-pick').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    // FAB chat bubble
+    let fabChatOpen = false;
+    function toggleFabChat() {
+      fabChatOpen = !fabChatOpen;
+      document.getElementById('fab-chat').style.display = fabChatOpen ? 'block' : 'none';
+      document.getElementById('fab-icon-chat').style.display = fabChatOpen ? 'none' : '';
+      document.getElementById('fab-icon-x').style.display = fabChatOpen ? '' : 'none';
+      document.getElementById('fab-main').style.background = fabChatOpen ? 'var(--hp-ink)' : 'var(--hp-rose)';
+      document.getElementById('fab-notif').style.display = fabChatOpen ? 'none' : '';
+      if (fabChatOpen) document.getElementById('fab-msg').focus();
+    }
+    function closeFabChat() {
+      if (fabChatOpen) toggleFabChat();
+    }
+    function closeFab() { closeFabChat(); }
+    function sendFabMsg() {
+      const msg = document.getElementById('fab-msg').value.trim();
+      if (!msg) return;
+      const url = 'https://t.me/happy_pets_che?text=' + encodeURIComponent(msg);
+      window.open(url, '_blank');
+      document.getElementById('fab-msg').value = '';
+    }
+    document.getElementById('fab-msg') && document.getElementById('fab-msg').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFabMsg(); }
+    });
+
+    const bOverlay = document.getElementById('booking-overlay');
+    if (bOverlay) bOverlay.addEventListener('click', function (e) { if (e.target === this) closeBooking(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeBooking(); closeFab(); } });
+  </script>
+
+  <div id="tweaks-root"></div>
+
+  <script type="text/babel">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "mood": "rose",
+      "density": "compact",
+      "heroStyle": "bold"
+    }/*EDITMODE-END*/;
+
+    function applyMood(mood) {
+      const root = document.documentElement;
+      if (mood === 'rose') {
+        root.style.setProperty('--hp-rose', '#D4457A');
+        root.style.setProperty('--hp-rose-deep', '#A6245A');
+        root.style.setProperty('--hp-rose-soft', '#FFD6E8');
+      } else if (mood === 'lilac') {
+        root.style.setProperty('--hp-rose', '#9B5EA0');
+        root.style.setProperty('--hp-rose-deep', '#6B3D70');
+        root.style.setProperty('--hp-rose-soft', '#EBDCEE');
+      } else if (mood === 'coral') {
+        root.style.setProperty('--hp-rose', '#E2724A');
+        root.style.setProperty('--hp-rose-deep', '#B84E2A');
+        root.style.setProperty('--hp-rose-soft', '#FFE4D6');
+      }
+    }
+
+    function applyDensity(density) {
+      const sections = document.querySelectorAll('.section');
+      const map = { compact: '56px 0', comfortable: '88px 0', spacious: '120px 0' };
+      sections.forEach(s => s.style.padding = map[density] || '88px 0');
+    }
+
+    function applyHeroStyle(style) {
+      const h1 = document.querySelector('.hero-h1');
+      if (!h1) return;
+      if (style === 'bold') {
+        h1.style.fontSize = 'clamp(52px, 5.5vw, 76px)';
+        h1.style.fontStyle = 'normal';
+        document.querySelector('.hero').style.minHeight = '640px';
+      } else if (style === 'editorial') {
+        h1.style.fontSize = 'clamp(44px, 4.5vw, 64px)';
+        h1.style.fontStyle = 'italic';
+        document.querySelector('.hero').style.minHeight = '560px';
+      } else if (style === 'minimal') {
+        h1.style.fontSize = 'clamp(36px, 3.5vw, 52px)';
+        h1.style.fontStyle = 'normal';
+        document.querySelector('.hero').style.minHeight = '480px';
+      }
+    }
+
+    function TweaksApp() {
+      const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+      React.useEffect(() => { applyMood(t.mood); }, [t.mood]);
+      React.useEffect(() => { applyDensity(t.density); }, [t.density]);
+      React.useEffect(() => { applyHeroStyle(t.heroStyle); }, [t.heroStyle]);
+
+      return (
+        <TweaksPanel>
+          <TweakSection label="Колірний настрій" />
+          <TweakRadio label="Акцент" value={t.mood} onChange={v => setTweak('mood', v)}
+            options={['rose', 'lilac', 'coral']}
+            labels={['🌸 Рожевий', '💜 Ліловий', '🍑 Кораловий']} />
+          <TweakSection label="Щільність секцій" />
+          <TweakRadio label="Відступи" value={t.density} onChange={v => setTweak('density', v)}
+            options={['compact', 'comfortable', 'spacious']}
+            labels={['Компактно', 'Комфортно', 'Просторо']} />
+          <TweakSection label="Hero-стиль" />
+          <TweakRadio label="Вигляд" value={t.heroStyle} onChange={v => setTweak('heroStyle', v)}
+            options={['bold', 'editorial', 'minimal']}
+            labels={['Жирний', 'Редакційний', 'Мінімальний']} />
+        </TweaksPanel>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweaksApp />);
+  </script>
+</body>
+
+</html>

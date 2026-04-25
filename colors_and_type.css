@@ -1,0 +1,205 @@
+/* Happy Pets — Colors & Type
+ * Brand: Happy Pets Grooming & Spa Salon, Cherkasy (вул. Симоненка, 5)
+ * Instagram: @happy_pets_che
+ *
+ * Source of truth for colors, type, spacing, radii, shadows, motion.
+ * Import this in every HTML file:  <link rel="stylesheet" href="colors_and_type.css">
+ * Then wrap your root in class="hp-reset" to pick up sensible defaults.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ============================================================
+     CORE BRAND COLORS  — from brandbook §05
+     ============================================================ */
+  --hp-rose:         #D4457A;   /* primary · signature */
+  --hp-rose-soft:    #FFD6E8;   /* surface · backdrops */
+  --hp-rose-deep:    #A6245A;   /* headings, hover */
+  --hp-lilac:        #9B5EA0;   /* secondary accent · max 10–15% of composition */
+
+  /* rose tint/shade scale for UI states */
+  --hp-rose-50:      #FFF4F8;
+  --hp-rose-100:     #FFE3EE;
+  --hp-rose-200:     #FFD6E8;
+  --hp-rose-300:     #F4A8C4;
+  --hp-rose-400:     #E67AA2;
+  --hp-rose-500:     #D4457A;
+  --hp-rose-600:     #BA2F65;
+  --hp-rose-700:     #A6245A;
+  --hp-rose-800:     #7A1A43;
+  --hp-rose-900:     #4D0F2A;
+
+  /* neutrals — warm, never cool/blue */
+  --hp-ink:          #1A1A2E;   /* body ink · primary text */
+  --hp-ink-2:        #4A4A5A;   /* secondary text */
+  --hp-ink-3:        #6E6E7E;   /* tertiary / meta */
+  --hp-paper:        #FDFAFB;   /* global page bg */
+  --hp-paper-2:      #F5F0F2;   /* muted surface */
+  --hp-rule:         #D0C8CB;   /* dividers */
+  --hp-rule-soft:    #EAE3E5;
+  --hp-white:        #FFFFFF;
+
+  /* status (use sparingly — brand is not a status-heavy product) */
+  --hp-success:      #3F8F5E;
+  --hp-warn:         #D6932E;
+  --hp-error:        #C0392B;
+
+  /* semantic aliases — prefer these in components */
+  --hp-bg:           var(--hp-paper);
+  --hp-surface:      var(--hp-white);
+  --hp-surface-alt:  var(--hp-rose-50);
+  --hp-surface-rose: var(--hp-rose-soft);
+  --hp-text:         var(--hp-ink);
+  --hp-text-2:       var(--hp-ink-2);
+  --hp-text-muted:   var(--hp-ink-3);
+  --hp-border:       var(--hp-rule);
+  --hp-border-soft:  var(--hp-rule-soft);
+  --hp-accent:       var(--hp-rose);
+  --hp-accent-deep:  var(--hp-rose-deep);
+  --hp-on-accent:    var(--hp-white);
+
+  /* ============================================================
+     TYPOGRAPHY  — Playfair Display + Nunito
+     Display: elegant, editorial, feminine. Text: soft humanist sans.
+     Both Google Fonts, full Cyrillic.
+     ============================================================ */
+  --hp-font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --hp-font-text:    'Nunito', 'Helvetica Neue', Arial, sans-serif;
+  --hp-font-mono:    'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  /* type scale (px) */
+  --hp-fs-hero:      80px;
+  --hp-fs-h1:        48px;
+  --hp-fs-h2:        32px;
+  --hp-fs-h3:        22px;
+  --hp-fs-body-lg:   18px;
+  --hp-fs-body:      16px;
+  --hp-fs-caption:   13px;
+  --hp-fs-label:     11px;
+
+  --hp-lh-tight:     1.08;
+  --hp-lh-snug:      1.25;
+  --hp-lh-normal:    1.5;
+  --hp-lh-loose:     1.7;
+
+  --hp-track-label:  0.14em;
+  --hp-track-tight:  -0.02em;
+  --hp-track-display:-0.03em;
+
+  /* ============================================================
+     SPACING — 4pt grid
+     ============================================================ */
+  --hp-s-1:  4px;
+  --hp-s-2:  8px;
+  --hp-s-3:  12px;
+  --hp-s-4:  16px;
+  --hp-s-5:  24px;
+  --hp-s-6:  32px;
+  --hp-s-7:  48px;
+  --hp-s-8:  64px;
+  --hp-s-9:  96px;
+
+  /* ============================================================
+     RADII — generous softness. Pills for CTAs.
+     ============================================================ */
+  --hp-r-xs:   4px;
+  --hp-r-sm:   8px;
+  --hp-r-md:   14px;
+  --hp-r-lg:   20px;
+  --hp-r-xl:   28px;
+  --hp-r-2xl:  40px;
+  --hp-r-pill: 999px;
+
+  /* ============================================================
+     ELEVATION — soft, warm. Shadow color tinted rose/plum.
+     NEVER use cool/blue shadows.
+     ============================================================ */
+  --hp-shadow-xs:  0 1px 2px rgba(74, 24, 48, 0.06);
+  --hp-shadow-sm:  0 2px 6px rgba(74, 24, 48, 0.08);
+  --hp-shadow-md:  0 8px 24px -8px rgba(122, 26, 67, 0.14);
+  --hp-shadow-lg:  0 20px 48px -16px rgba(122, 26, 67, 0.22);
+  --hp-shadow-xl:  0 32px 80px -24px rgba(122, 26, 67, 0.28);
+  --hp-shadow-ring:0 0 0 3px rgba(212, 69, 122, 0.20);
+
+  /* ============================================================
+     MOTION — gentle, never bouncy
+     ============================================================ */
+  --hp-ease:       cubic-bezier(.22,.61,.36,1);
+  --hp-ease-out:   cubic-bezier(.16,1,.3,1);
+  --hp-ease-inout: cubic-bezier(.65,0,.35,1);
+  --hp-dur-1:      120ms;   /* micro · hover */
+  --hp-dur-2:      200ms;   /* UI reveal */
+  --hp-dur-3:      320ms;   /* transition */
+  --hp-dur-4:      520ms;   /* page / large elements */
+}
+
+/* ============================================================
+   RESET — apply to the root of any artboard/page
+   ============================================================ */
+.hp-reset, .hp-reset * { box-sizing: border-box; }
+.hp-reset {
+  font-family: var(--hp-font-text);
+  color: var(--hp-text);
+  background: var(--hp-surface);
+  font-size: var(--hp-fs-body);
+  line-height: var(--hp-lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+.hp-reset h1, .hp-reset h2, .hp-reset h3, .hp-reset h4 {
+  font-family: var(--hp-font-display);
+  color: var(--hp-text);
+  font-weight: 700;
+  letter-spacing: var(--hp-track-tight);
+  line-height: var(--hp-lh-tight);
+  margin: 0;
+}
+.hp-reset p { margin: 0; }
+.hp-reset button {
+  font-family: var(--hp-font-text);
+  cursor: pointer;
+  transition: background var(--hp-dur-2) var(--hp-ease),
+              color var(--hp-dur-2) var(--hp-ease),
+              box-shadow var(--hp-dur-2) var(--hp-ease),
+              transform var(--hp-dur-1) var(--hp-ease);
+}
+.hp-reset button:active { transform: translateY(1px) scale(0.99); }
+
+/* ============================================================
+   SEMANTIC UTILITIES
+   ============================================================ */
+
+/* Type roles — map to brandbook hierarchy */
+.hp-hero    { font-family: var(--hp-font-display); font-weight: 800; font-size: var(--hp-fs-hero); line-height: .95; letter-spacing: var(--hp-track-display); }
+.hp-h1      { font-family: var(--hp-font-display); font-weight: 700; font-size: var(--hp-fs-h1);   line-height: var(--hp-lh-tight); letter-spacing: var(--hp-track-tight); }
+.hp-h2      { font-family: var(--hp-font-display); font-weight: 600; font-size: var(--hp-fs-h2);   line-height: var(--hp-lh-tight); letter-spacing: var(--hp-track-tight); }
+.hp-h3      { font-family: var(--hp-font-text);    font-weight: 800; font-size: var(--hp-fs-h3);   line-height: var(--hp-lh-snug);  letter-spacing: -0.01em; }
+.hp-body-lg { font-family: var(--hp-font-text);    font-weight: 400; font-size: var(--hp-fs-body-lg); line-height: var(--hp-lh-normal); }
+.hp-body    { font-family: var(--hp-font-text);    font-weight: 400; font-size: var(--hp-fs-body);    line-height: var(--hp-lh-normal); }
+.hp-caption { font-family: var(--hp-font-text);    font-weight: 400; font-size: var(--hp-fs-caption); line-height: var(--hp-lh-normal); font-style: italic; color: var(--hp-ink-2); }
+.hp-label   { font-family: var(--hp-font-text);    font-weight: 700; font-size: var(--hp-fs-label);   letter-spacing: var(--hp-track-label); text-transform: uppercase; color: var(--hp-ink-2); }
+.hp-mono    { font-family: var(--hp-font-mono);    font-size: 12px; letter-spacing: 0; }
+.hp-italic-display { font-family: var(--hp-font-display); font-style: italic; font-weight: 500; }
+
+/* Surfaces */
+.hp-board          { padding: 56px; background: var(--hp-surface); }
+.hp-board--cream   { background: var(--hp-paper-2); }
+.hp-board--rose    { background: var(--hp-rose-soft); }
+.hp-board--ink     { background: var(--hp-ink); color: var(--hp-white); }
+.hp-board--ink h1, .hp-board--ink h2, .hp-board--ink h3 { color: var(--hp-white); }
+
+/* Rules & dividers */
+.hp-hairline { height: 1px; background: var(--hp-rule); border: 0; width: 100%; }
+.hp-dashed-rule { height: 0; border: 0; border-top: 1px dashed var(--hp-rule); }
+
+/* Decorative scallop — card tops, tag edges, stickers */
+.hp-scallop {
+  height: 14px;
+  background-image: radial-gradient(circle at 7px 14px, var(--hp-rose) 6px, transparent 6.5px);
+  background-size: 14px 14px;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+}
+.hp-scallop--soft { background-image: radial-gradient(circle at 7px 14px, var(--hp-rose-soft) 6px, transparent 6.5px); }
