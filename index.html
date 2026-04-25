@@ -8,6 +8,7 @@
   <meta name="description"
     content="Грумінг-салон у центрі Черкас. Стрижка, купання, SPA, озонотерапія для собак і котів усіх порід. Онлайн-запис 24/7.">
   <link rel="stylesheet" href="colors_and_type.css">
+  <link rel="stylesheet" href="mobile_responsive.css">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
     integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
@@ -633,7 +634,7 @@
           </svg>
           Telegram
         </a>
-        <button class="btn btn-primary btn-sm" onclick="openBooking()">
+        <button class="btn btn-primary btn-sm" onclick="openOldBooking()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="white" aria-hidden="true">
             <ellipse cx="12" cy="15" rx="6" ry="5" />
             <circle cx="5.5" cy="9" r="2.2" />
@@ -643,9 +644,45 @@
           </svg>
           Записатися
         </button>
+        <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Відкрити меню">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
+
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-header">
+      <span class="nav-logo-name" style="font-size:24px;">Happy Pets</span>
+      <button class="mobile-drawer-close" onclick="toggleMobileMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <ul class="mobile-drawer-links">
+      <li><a href="#services" onclick="toggleMobileMenu()">Послуги</a></li>
+      <li><a href="#team" onclick="toggleMobileMenu()">Команда</a></li>
+      <li><a href="#pricing" onclick="toggleMobileMenu()">Ціни</a></li>
+      <li><a href="#gallery" onclick="toggleMobileMenu()">Роботи</a></li>
+      <li><a href="#reviews" onclick="toggleMobileMenu()">Відгуки</a></li>
+      <li><a href="#contacts" onclick="toggleMobileMenu()">Контакти</a></li>
+    </ul>
+    <div class="mobile-drawer-footer">
+      <a href="https://t.me/happy_pets_che" target="_blank" class="btn btn-secondary btn-sm" style="width:100%; justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        Telegram
+      </a>
+    </div>
+  </div>
+  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="toggleMobileMenu()"></div>
 
   <!-- ════════════════════════════════════════════
      HERO
@@ -2342,48 +2379,18 @@
           </button>
         </div>
 
-        <!-- Map placeholder -->
+        <!-- Real Google Map -->
         <div
-          style="background:var(--hp-ink);border-radius:var(--hp-r-xl);overflow:hidden;height:420px;position:relative;box-shadow:var(--hp-shadow-md);">
-          <!-- Decorative map grid -->
-          <svg width="100%" height="100%" style="position:absolute;inset:0;opacity:0.15">
-            <defs>
-              <pattern id="map-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#FFD6E8" stroke-width="0.5" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#map-grid)" />
-          </svg>
-          <!-- Streets simulation -->
-          <svg width="100%" height="100%" style="position: absolute; inset: 0; opacity: 0.2; height: 371px">
-            <line x1="0" y1="45%" x2="100%" y2="45%" stroke="#FFD6E8" stroke-width="3" />
-            <line x1="0" y1="70%" x2="100%" y2="70%" stroke="#FFD6E8" stroke-width="1.5" />
-            <line x1="35%" y1="0" x2="35%" y2="100%" stroke="#FFD6E8" stroke-width="2.5" />
-            <line x1="65%" y1="0" x2="65%" y2="100%" stroke="#FFD6E8" stroke-width="1.5" />
-          </svg>
-          <!-- Pin -->
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);text-align:center;">
-            <div
-              style="width:52px;height:52px;background:var(--hp-rose);border-radius:50% 50% 50% 0;transform:rotate(-45deg);margin:0 auto;box-shadow:var(--hp-shadow-lg);display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="white" style="transform:rotate(45deg);">
-                <ellipse cx="12" cy="15" rx="6" ry="5" />
-                <circle cx="5.5" cy="9" r="2.2" />
-                <circle cx="10" cy="5.5" r="2" />
-                <circle cx="14" cy="5.5" r="2" />
-                <circle cx="18.5" cy="9" r="2.2" />
-              </svg>
-            </div>
-            <div
-              style="margin-top:12px;background:#fff;border-radius:var(--hp-r-md);padding:10px 16px;box-shadow:var(--hp-shadow-md);white-space:nowrap;">
-              <div style="font-weight:800;font-size:14px;color:var(--hp-ink);">Happy Pets</div>
-              <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">вул. Симоненка, 5</div>
-            </div>
-          </div>
-          <!-- Google Maps button -->
+          style="background:var(--hp-paper);border-radius:var(--hp-r-xl);overflow:hidden;height:420px;position:relative;box-shadow:var(--hp-shadow-md);border:1px solid var(--hp-rule-soft);">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2594.3413867623955!2d32.058376576856524!3d49.44026367141757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d14b840899f579%3A0x63359d9c28383c2!2z0LLRg9C7LiDQodC40LzQvtC90LXQvdC60LAsIDUsINCn0LXRgNC60LDRgdC4LCDQp9C10YDQutCw0YHRjNC60LAg0L7QsdC70LDRgdGC0YwsIDE4MDAw!5e0!3m2!1suk!2sua!4v1714080000000!5m2!1suk!2sua" 
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          
+          <!-- Open in Google Maps Button -->
           <a href="https://maps.google.com/?q=Черкаси+вул+Симоненка+5" target="_blank"
-            style="position:absolute;bottom:16px;right:16px;" class="btn btn-sm"
-            style="background:rgba(255,255,255,0.9);color:var(--hp-ink);border-radius:var(--hp-r-md);">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            class="btn btn-sm"
+            style="position:absolute;bottom:16px;right:16px;background:rgba(255,255,255,0.95);color:var(--hp-ink);border-radius:var(--hp-r-md);box-shadow:var(--hp-shadow-sm);backdrop-filter:blur(4px);border:1px solid rgba(0,0,0,0.05);padding:8px 16px;font-size:12px;z-index:10;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-right:4px;">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
@@ -2850,14 +2857,14 @@
     let bookingStep = 1;
     const stepTitles = ['Познайомимось?', 'Розкажіть про улюбленця', 'Оберіть послугу 🐾'];
 
-    function openBooking() {
+    function openOldBooking() {
       bookingStep = 1;
       updateBookingStep();
       document.getElementById('booking-overlay').style.display = 'flex';
       document.body.style.overflow = 'hidden';
       closeFab();
     }
-    function closeBooking() {
+    function closeOldBooking() {
       document.getElementById('booking-overlay').style.display = 'none';
       document.body.style.overflow = '';
     }
@@ -3057,6 +3064,26 @@
 
     // Initialize after load
     window.addEventListener('load', initReviewRotation);
+  </script>
+  <script>
+    function openBooking() {
+      window.open("https://booking.easyweek.com.ua/happy-pets-grooming", "_blank");
+    }
+
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobileDrawer');
+      const backdrop = document.getElementById('mobileDrawerBackdrop');
+      if (drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        backdrop.classList.remove('open');
+        document.body.style.overflow = '';
+      } else {
+        drawer.classList.add('open');
+        backdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
   </script>
 </body>
 

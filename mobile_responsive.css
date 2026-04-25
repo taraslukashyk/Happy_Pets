@@ -1,0 +1,357 @@
+/* Professional Mobile Adaptability */
+
+.nav-hamburger {
+  display: none;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100vh;
+  background: var(--hp-paper);
+  z-index: 1000;
+  padding: 24px;
+  box-shadow: var(--hp-shadow-lg);
+  transition: right 0.3s var(--hp-ease);
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-drawer.open {
+  right: 0;
+}
+
+.mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.mobile-drawer-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--hp-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-drawer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.mobile-drawer-links a {
+  text-decoration: none;
+  color: var(--hp-ink);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mobile-drawer-footer {
+  margin-top: auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--hp-rule-soft);
+}
+
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--hp-ease);
+  backdrop-filter: blur(2px);
+}
+
+.mobile-drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 992px) {
+  /* Reduce hero font size and grid */
+  .hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .hero-h1 {
+    font-size: clamp(40px, 8vw, 52px) !important;
+  }
+  .hero-visual {
+    min-height: 360px !important;
+  }
+  .hero-review-card {
+    display: none !important; /* Hide on smaller screens to keep it clean */
+  }
+
+  /* Reduce grid columns */
+  div[style*="grid-template-columns:repeat(4,1fr)"],
+  div[style*="grid-template-columns: repeat(4, 1fr)"],
+  div[style*="grid-template-columns:repeat(3,1fr)"],
+  div[style*="grid-template-columns: repeat(3, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  div[style*="grid-template-columns:1.6fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Common spacing */
+  .section {
+    padding: 64px 0 !important;
+  }
+  .section-inner {
+    padding: 0 16px !important;
+  }
+  .hero {
+    padding: 40px 0 60px !important;
+  }
+  .hero-inner {
+    padding: 0 16px !important;
+  }
+
+  /* Nav adjustments */
+  .nav-inner {
+    padding: 0 16px !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important; /* Keep logo, button, hamburger on same line */
+    height: 60px !important;
+  }
+  
+  /* Hide nav links on mobile to show drawer instead */
+  .nav-links {
+    display: none !important;
+  }
+  
+  .nav-hamburger {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--hp-ink);
+    cursor: pointer;
+    padding: 8px;
+    margin-left: 4px;
+  }
+  
+  .nav-cta {
+    gap: 0 !important;
+  }
+  .nav-cta .btn-primary {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Make sure logo fits on small screens */
+  .nav-logo img {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  .nav-logo-name {
+    font-size: 18px !important;
+  }
+
+  /* Hero */
+  .hero-h1 {
+    font-size: clamp(32px, 10vw, 40px) !important;
+  }
+  .hero-stat-badge {
+    top: 10px !important;
+    right: 10px !important;
+    padding: 8px 12px !important;
+  }
+  .hero-stat-num {
+    font-size: 20px !important;
+  }
+  
+  .hero-photo-wrap {
+    border-radius: var(--hp-r-xl) !important;
+  }
+
+  /* Grids */
+  div[style*="grid-template-columns:repeat(4,1fr)"],
+  div[style*="grid-template-columns: repeat(4, 1fr)"],
+  div[style*="grid-template-columns:repeat(3,1fr)"],
+  div[style*="grid-template-columns: repeat(3, 1fr)"],
+  div[style*="grid-template-columns:repeat(2,1fr)"],
+  div[style*="grid-template-columns: repeat(2, 1fr)"],
+  div[style*="grid-template-columns:1fr 1.4fr"],
+  div[style*="grid-template-columns:1.6fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Services tabs */
+  #svc-tabs {
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+  }
+  .svc-tab {
+    width: auto !important;
+    flex: 1 1 auto !important;
+    text-align: center !important;
+  }
+
+  /* Pricing table horizontal on mobile */
+  #pricing .section-inner {
+    padding: 0 8px !important; /* Small padding for the section */
+  }
+  
+  /* Make the container fit perfectly */
+  div[style*="background:var(--hp-paper-2);border-radius:var(--hp-r-lg);overflow:hidden;"] {
+    overflow-x: visible !important;
+    border-radius: var(--hp-r-md) !important;
+  }
+  
+  /* Ensure the legend doesn't overlap */
+  #pricing > div.section-inner > div:nth-child(2) {
+    overflow-x: visible !important;
+    white-space: normal !important;
+  }
+  
+  /* The row grid - proportional to fit all screens nicely */
+  div[style*="grid-template-columns:2fr 1fr 1fr 1fr 80px"],
+  .price-row {
+    display: grid !important;
+    grid-template-columns: 1.6fr 1fr 1fr 1.2fr 35px !important;
+    min-width: 0 !important; /* Remove min-width to allow shrinking */
+    width: 100% !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px dashed var(--hp-rule-soft) !important;
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+  
+  /* Fix Legend Padding so they don't bunch up */
+  div[style*="grid-template-columns:2fr 1fr 1fr 1fr 80px"] > div {
+    padding: 8px 2px !important; 
+    display: flex;
+    justify-content: center;
+  }
+  div[style*="grid-template-columns:2fr 1fr 1fr 1fr 80px"] > div > div {
+    padding: 4px 6px !important; 
+    border-radius: 4px !important;
+    width: 100%;
+  }
+  div[style*="grid-template-columns:2fr 1fr 1fr 1fr 80px"] span {
+    font-size: 8px !important; 
+    letter-spacing: 0 !important;
+    white-space: normal !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* Adjust the last column (time) header to fit */
+  div[style*="grid-template-columns:2fr 1fr 1fr 1fr 80px"] > div:last-child {
+    padding: 10px 0 !important;
+    text-align: center !important;
+  }
+  
+  .price-row > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 12px 2px !important;
+  }
+  
+  /* Breed cell */
+  .price-row > div:first-child {
+    grid-column: auto !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    text-align: left !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    padding: 12px 4px 12px 8px !important; /* Left alignment and balanced padding */
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+    flex-direction: column !important; /* Keep breed name and weight stacked */
+  }
+  
+  /* Hide SVG icon in breed column to save space */
+  .price-breed svg {
+    display: none !important;
+  }
+  
+  /* Price cells */
+  .price-row .price-cell {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+  
+  .price-row .price-time {
+    font-size: 10px !important;
+  }
+  
+  /* Remove labels that I added previously */
+  .price-row > div::before {
+    content: none !important;
+  }
+
+  /* Instagram feed */
+  #ig-feed, div[style*="grid-template-columns:repeat(5,1fr)"], div[style*="grid-template-columns:repeat(6,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* Team specific */
+  .master-photo {
+    height: 340px !important;
+  }
+  .master-photo img {
+    object-position: top center !important;
+  }
+  
+  /* Buttons */
+  .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .nav-cta {
+    gap: 8px !important;
+  }
+  .nav-cta .btn {
+    width: auto !important;
+  }
+  .nav-cta .btn-ghost {
+    display: none !important; /* Hide telegram button on small nav to save space */
+  }
+  .hero-cta .btn {
+    width: 100% !important;
+  }
+  .section-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .section-header .btn {
+    width: 100% !important;
+    margin-top: 16px !important;
+  }
+  
+  /* Testimonial specific */
+  .review-card {
+    padding: 24px !important;
+  }
+  
+  /* Booking modal adjustments */
+  .booking-modal-content {
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+  }
+}
