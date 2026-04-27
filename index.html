@@ -3057,6 +3057,30 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeBooking(); closeFab(); } });
   </script>
 
+  <!-- Scroll to Top Button -->
+  <button id="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+    style="display:none;position:fixed;bottom:24px;left:24px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.3);cursor:pointer;z-index:140;align-items:center;justify-content:center;transition:all 0.3s var(--hp-ease);box-shadow:var(--hp-shadow-sm);color:var(--hp-ink);opacity:0.6;"
+    onmouseover="this.style.opacity='1';this.style.background='rgba(255,255,255,0.4)';this.style.transform='translateY(-3px)'"
+    onmouseout="this.style.opacity='0.6';this.style.background='rgba(255,255,255,0.2)';this.style.transform='translateY(0)'">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const st = document.getElementById('scroll-top');
+      if (window.scrollY > 500) {
+        st.style.display = 'flex';
+        setTimeout(() => { st.style.opacity = '0.6'; }, 10);
+      } else {
+        st.style.opacity = '0';
+        setTimeout(() => { if (window.scrollY <= 500) st.style.display = 'none'; }, 300);
+      }
+    });
+  </script>
+
   <div id="tweaks-root"></div>
 
   <script type="text/babel">
