@@ -379,4 +379,19 @@
     max-height: 100% !important;
     border-radius: 0 !important;
   }
+  /* Service cards price/button layout */
+  .svc-card-footer {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+    padding-top: 16px !important;
+  }
+  
+  .svc-card-footer > div {
+    text-align: left !important;
+  }
+  
+  .svc-card-footer .btn {
+    margin-top: 8px !important;
+  }
 }

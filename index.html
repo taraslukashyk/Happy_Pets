@@ -602,6 +602,35 @@
       background: var(--hp-rose);
       animation: pulse 2s infinite;
     }
+    /* ── FAB Neon Glow ── */
+    .fab-neon {
+      box-shadow: 
+        0 0 5px var(--hp-rose),
+        0 0 10px var(--hp-rose),
+        0 0 20px var(--hp-rose),
+        0 4px 20px rgba(212, 69, 122, 0.45);
+      animation: fab-glow 3s infinite ease-in-out;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    }
+
+    @keyframes fab-glow {
+      0%, 100% {
+        box-shadow: 
+          0 0 5px var(--hp-rose),
+          0 0 10px var(--hp-rose),
+          0 0 20px var(--hp-rose),
+          0 4px 20px rgba(212, 69, 122, 0.45);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 
+          0 0 10px var(--hp-rose),
+          0 0 25px var(--hp-rose),
+          0 0 45px var(--hp-rose),
+          0 4px 30px rgba(212, 69, 122, 0.6);
+        transform: scale(1.05);
+      }
+    }
   </style>
 </head>
 
@@ -1022,7 +1051,7 @@
               <div class="inc-item">Pet-стрижка</div>
               <div class="inc-item">Гігієнічна стрижка в комплексі</div>
             </div>
-            <div
+            <div class="svc-card-footer"
               style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
               <div>
                 <div
@@ -1054,7 +1083,7 @@
               <div class="inc-item-inv">Гігієна інтимних зон</div>
               <div class="inc-item-inv">Стрижка подушечок + «Відкрити очі»</div>
             </div>
-            <div
+            <div class="svc-card-footer"
               style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid rgba(255,255,255,0.25);">
               <div>
                 <div style="font-family:var(--hp-font-display);font-size:24px;font-weight:700;letter-spacing:-0.02em;">
@@ -1083,7 +1112,7 @@
               гідромасаж + масаж</p>
             <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.55;margin-bottom:16px;">Антиоксидантна дія,
               насичує шкіру та шерсть вітамінами, робить її м'якою та блискучою.</p>
-            <div
+            <div class="svc-card-footer"
               style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px dashed var(--hp-rule); opacity: 1; gap: 3px; padding: 11px 0px 0px; border-width: 0px">
               <div>
                 <div
@@ -1111,7 +1140,7 @@
               Озон + гідромасаж</p>
             <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.55;margin-bottom:16px;">Лікування запалення
               шкіри, зволоження та оздоровлення.</p>
-            <div
+            <div class="svc-card-footer"
               style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
               <div>
                 <div
@@ -1139,7 +1168,7 @@
               лінії Atami + PH-баланс</p>
             <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.55;margin-bottom:16px;">Для росту та укріплення
               шерсті. При алопеціях. Підходить для всіх типів шерсті.</p>
-            <div
+            <div class="svc-card-footer"
               style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
               <div>
                 <div
@@ -1165,7 +1194,7 @@
             <p style="font-size:13px;color:var(--hp-ink-2);line-height:1.6;margin-bottom:16px;">Як розчісувати шерсть,
               яку косметику обрати, як підтримувати бездоганний вигляд між візитами. Індивідуальний підхід з урахуванням
               породи.</p>
-            <div
+            <div class="svc-card-footer"
               style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px dashed var(--hp-rule);">
               <div>
                 <div
@@ -2755,29 +2784,29 @@
         </svg>
       </button>
     </div>
-    <!-- Voice message hint -->
+    <!-- Booking hint -->
     <div style="padding:0 12px 12px;display:flex;align-items:center;gap:10px;">
       <div style="flex:1;height:1px;background:var(--hp-rule-soft);"></div>
-      <span style="font-size:11px;color:var(--hp-ink-3);white-space:nowrap;">або залишайте голосове</span>
+      <span style="font-size:11px;color:var(--hp-ink-3);white-space:nowrap;">або забронюйте час</span>
       <div style="flex:1;height:1px;background:var(--hp-rule-soft);"></div>
     </div>
     <div style="padding:0 12px 14px;display:flex;justify-content:center;">
-      <a href="https://t.me/happy_pets_che" target="_blank" id="fab-voice-btn"
-        style="display:flex;align-items:center;gap:10px;padding:10px 20px;border-radius:var(--hp-r-pill);background:var(--hp-rose-soft);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s var(--hp-ease);"
-        onmouseover="this.style.background='var(--hp-rose-100)'"
-        onmouseout="this.style.background='var(--hp-rose-soft)'">
-        <div id="fab-mic-wrap"
-          style="width:32px;height:32px;border-radius:50%;background:var(--hp-rose);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-            <line x1="12" y1="19" x2="12" y2="23" />
-            <line x1="8" y1="23" x2="16" y2="23" />
+      <button onclick="openBooking(); closeFabChat();" id="fab-booking-btn"
+        style="display:flex;align-items:center;gap:10px;padding:12px 24px;border-radius:var(--hp-r-pill);background:var(--hp-rose);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s var(--hp-ease);width:100%;justify-content:center;box-shadow:var(--hp-shadow-md);"
+        onmouseover="this.style.background='var(--hp-rose-deep)'"
+        onmouseout="this.style.background='var(--hp-rose)'">
+        <div id="fab-paw-wrap"
+          style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <ellipse cx="12" cy="15" rx="6" ry="5" />
+            <circle cx="5.5" cy="9" r="2.2" />
+            <circle cx="10" cy="5.5" r="2" />
+            <circle cx="14" cy="5.5" r="2" />
+            <circle cx="18.5" cy="9" r="2.2" />
           </svg>
         </div>
-        <span style="font-size:13px;font-weight:700;color:var(--hp-rose-deep);">Голосове в Telegram</span>
-      </a>
+        <span style="font-size:15px;font-weight:700;color:#fff;">Записатися</span>
+      </button>
     </div>
     <!-- Quick channel buttons -->
     <div style="padding:0 12px 14px;display:flex;gap:7px;">
@@ -2820,8 +2849,8 @@
       style="position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:#4ade80;border:2px solid #fff;z-index:1;animation:pulse 2.5s infinite;">
     </div>
 
-    <button id="fab-main" onclick="toggleFabChat()"
-      style="width:56px;height:56px;border-radius:50%;background:var(--hp-rose);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(212,69,122,0.45);display:flex;align-items:center;justify-content:center;transition:all 0.25s var(--hp-ease);position:relative;"
+    <button id="fab-main" onclick="toggleFabChat()" class="fab-neon"
+      style="width:56px;height:56px;border-radius:50%;background:var(--hp-rose);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s var(--hp-ease);position:relative;"
       title="Написати нам">
       <svg id="fab-icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"
         stroke-linecap="round" stroke-linejoin="round">
