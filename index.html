@@ -631,6 +631,20 @@
         transform: scale(1.05);
       }
     }
+    @keyframes fab-icon-1 {
+      0%, 40% { opacity: 1; transform: scale(1) rotate(0); }
+      50%, 90% { opacity: 0; transform: scale(0.5) rotate(-15deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    @keyframes fab-icon-2 {
+      0%, 40% { opacity: 0; transform: scale(0.5) rotate(15deg); }
+      50%, 90% { opacity: 1; transform: scale(1) rotate(0); }
+      100% { opacity: 0; transform: scale(0.5) rotate(15deg); }
+    }
+
+    .icon-pencil { animation: fab-icon-1 4s infinite ease-in-out; }
+    .icon-calendar { animation: fab-icon-2 4s infinite ease-in-out; }
   </style>
 </head>
 
@@ -2852,11 +2866,23 @@
     <button id="fab-main" onclick="toggleFabChat()" class="fab-neon"
       style="width:56px;height:56px;border-radius:50%;background:var(--hp-rose);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s var(--hp-ease);position:relative;"
       title="Написати нам">
-      <svg id="fab-icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-      <svg id="fab-icon-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+      <!-- Alternating Icons Container -->
+      <div id="fab-icons-loop" style="position:relative;width:24px;height:24px;display:flex;align-items:center;justify-content:center;">
+        <!-- Pencil icon -->
+        <svg class="fab-loop-icon icon-pencil" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        <!-- Calendar icon -->
+        <svg class="fab-loop-icon icon-calendar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; opacity:0;">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <!-- Close icon -->
+      <svg id="fab-icon-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
         stroke-linecap="round" style="display:none;">
         <line x1="18" y1="6" x2="6" y2="18" />
         <line x1="6" y1="6" x2="18" y2="18" />
@@ -2957,7 +2983,7 @@
     function toggleFabChat() {
       fabChatOpen = !fabChatOpen;
       document.getElementById('fab-chat').style.display = fabChatOpen ? 'block' : 'none';
-      document.getElementById('fab-icon-chat').style.display = fabChatOpen ? 'none' : '';
+      document.getElementById('fab-icons-loop').style.display = fabChatOpen ? 'none' : 'flex';
       document.getElementById('fab-icon-x').style.display = fabChatOpen ? '' : 'none';
       document.getElementById('fab-main').style.background = fabChatOpen ? 'var(--hp-ink)' : 'var(--hp-rose)';
       document.getElementById('fab-notif').style.display = fabChatOpen ? 'none' : '';
