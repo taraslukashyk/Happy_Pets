@@ -602,9 +602,10 @@
       background: var(--hp-rose);
       animation: pulse 2s infinite;
     }
+
     /* ── FAB Neon Glow ── */
     .fab-neon {
-      box-shadow: 
+      box-shadow:
         0 0 5px var(--hp-rose),
         0 0 10px var(--hp-rose),
         0 0 20px var(--hp-rose),
@@ -614,16 +615,19 @@
     }
 
     @keyframes fab-glow {
-      0%, 100% {
-        box-shadow: 
+
+      0%,
+      100% {
+        box-shadow:
           0 0 5px var(--hp-rose),
           0 0 10px var(--hp-rose),
           0 0 20px var(--hp-rose),
           0 4px 20px rgba(212, 69, 122, 0.45);
         transform: scale(1);
       }
+
       50% {
-        box-shadow: 
+        box-shadow:
           0 0 10px var(--hp-rose),
           0 0 25px var(--hp-rose),
           0 0 45px var(--hp-rose),
@@ -631,20 +635,54 @@
         transform: scale(1.05);
       }
     }
+
     @keyframes fab-icon-1 {
-      0%, 40% { opacity: 1; transform: scale(1) rotate(0); }
-      50%, 90% { opacity: 0; transform: scale(0.5) rotate(-15deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0); }
+
+      0%,
+      40% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+
+      50%,
+      90% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-15deg);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
     }
 
     @keyframes fab-icon-2 {
-      0%, 40% { opacity: 0; transform: scale(0.5) rotate(15deg); }
-      50%, 90% { opacity: 1; transform: scale(1) rotate(0); }
-      100% { opacity: 0; transform: scale(0.5) rotate(15deg); }
+
+      0%,
+      40% {
+        opacity: 0;
+        transform: scale(0.5) rotate(15deg);
+      }
+
+      50%,
+      90% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0.5) rotate(15deg);
+      }
     }
 
-    .icon-pencil { animation: fab-icon-1 4s infinite ease-in-out; }
-    .icon-calendar { animation: fab-icon-2 4s infinite ease-in-out; }
+    .icon-pencil {
+      animation: fab-icon-1 4s infinite ease-in-out;
+    }
+
+    .icon-calendar {
+      animation: fab-icon-2 4s infinite ease-in-out;
+    }
   </style>
 </head>
 
@@ -1532,7 +1570,7 @@
       <div class="section-header">
         <div>
           <div class="section-eyebrow">04 · Ціни</div>
-          <h2 class="section-title">Все прозоро — без сюрпризів</h2>
+          <h2 class="section-title">Ціни на послуги</h2>
           <p class="section-sub">Час фіксований. Ціна теж. Якщо є особливості — проговоримо до запису.</p>
         </div>
         <button class="btn btn-primary btn-md" onclick="openBooking()">
@@ -1687,29 +1725,37 @@
             <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Фруктовий рай</div>
             <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Фруктове Спа + Озон + гідромасаж</div>
             <div
-              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
-              650–950 ₴ · 30–40 хв</div>
+              style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
+              <span style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);">650–950 ₴</span>
+              <span style="font-family:var(--hp-font-text);font-size:13px;color:var(--hp-ink-3);font-weight:600;letter-spacing:0.02em;">30–40 хв</span>
+            </div>
           </div>
           <div class="hygiene-item">
             <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Релаксуюче Спа</div>
             <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Мінеральна бомбочка + Озон</div>
             <div
-              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
-              650–950 ₴ · 30 хв</div>
+              style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
+              <span style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);">650–950 ₴</span>
+              <span style="font-family:var(--hp-font-text);font-size:13px;color:var(--hp-ink-3);font-weight:600;letter-spacing:0.02em;">30 хв</span>
+            </div>
           </div>
           <div class="hygiene-item">
             <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Атамі Спа</div>
             <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Ріст і укріплення шерсті</div>
             <div
-              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
-              700–1 000 ₴ · 1 год</div>
+              style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
+              <span style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);">700–1 000 ₴</span>
+              <span style="font-family:var(--hp-font-text);font-size:13px;color:var(--hp-ink-3);font-weight:600;letter-spacing:0.02em;">1 год</span>
+            </div>
           </div>
           <div class="hygiene-item">
             <div style="font-weight:700;font-size:14px;color:var(--hp-ink);">Протизапальна ванна</div>
             <div style="font-size:12px;color:var(--hp-ink-3);margin-top:2px;">Глина + Озон + гідромасаж</div>
             <div
-              style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);margin-top:6px;">
-              700–1 000 ₴ · 1 год</div>
+              style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
+              <span style="font-family:var(--hp-font-display);font-size:20px;font-weight:700;color:var(--hp-rose-deep);">700–1 000 ₴</span>
+              <span style="font-family:var(--hp-font-text);font-size:13px;color:var(--hp-ink-3);font-weight:600;letter-spacing:0.02em;">1 год</span>
+            </div>
           </div>
         </div>
       </div>
@@ -2807,8 +2853,7 @@
     <div style="padding:0 12px 14px;display:flex;justify-content:center;">
       <button onclick="openBooking(); closeFabChat();" id="fab-booking-btn"
         style="display:flex;align-items:center;gap:10px;padding:12px 24px;border-radius:var(--hp-r-pill);background:var(--hp-rose);border:none;cursor:pointer;text-decoration:none;transition:all 0.2s var(--hp-ease);width:100%;justify-content:center;box-shadow:var(--hp-shadow-md);"
-        onmouseover="this.style.background='var(--hp-rose-deep)'"
-        onmouseout="this.style.background='var(--hp-rose)'">
+        onmouseover="this.style.background='var(--hp-rose-deep)'" onmouseout="this.style.background='var(--hp-rose)'">
         <div id="fab-paw-wrap"
           style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
@@ -2867,14 +2912,17 @@
       style="width:56px;height:56px;border-radius:50%;background:var(--hp-rose);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s var(--hp-ease);position:relative;"
       title="Написати нам">
       <!-- Alternating Icons Container -->
-      <div id="fab-icons-loop" style="position:relative;width:24px;height:24px;display:flex;align-items:center;justify-content:center;">
+      <div id="fab-icons-loop"
+        style="position:relative;width:24px;height:24px;display:flex;align-items:center;justify-content:center;">
         <!-- Pencil icon -->
-        <svg class="fab-loop-icon icon-pencil" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;">
+        <svg class="fab-loop-icon icon-pencil" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;">
           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
           <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
         </svg>
         <!-- Calendar icon -->
-        <svg class="fab-loop-icon icon-calendar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; opacity:0;">
+        <svg class="fab-loop-icon icon-calendar" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; opacity:0;">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
           <line x1="16" y1="2" x2="16" y2="6"></line>
           <line x1="8" y1="2" x2="8" y2="6"></line>

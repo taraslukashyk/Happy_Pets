@@ -292,7 +292,7 @@ const PriceTable = () => {
     <section id="pricing" style={{ padding: '88px 0', background: '#fff' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
         <div className="hp-label" style={{ color: 'var(--hp-rose)' }}>04 · Прайс</div>
-        <h2 className="hp-h1" style={{ marginTop: 10, marginBottom: 8 }}>Все прозоро — і без сюрпризів</h2>
+        <h2 className="hp-h1" style={{ marginTop: 10, marginBottom: 8 }}>Ціни на Послуги</h2>
         <p style={{ color: 'var(--hp-ink-2)', fontSize: 16, maxWidth: 600, marginBottom: 28 }}>
           Час процедури фіксований. Ціна — теж. Якщо є протипоказання чи особливості — ми чесно проговоримо це до запису.
         </p>
